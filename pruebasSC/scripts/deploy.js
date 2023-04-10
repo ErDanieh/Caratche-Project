@@ -1,4 +1,4 @@
-const { ethers } = require("hardhat");
+  const { ethers } = require("hardhat");
 require("dotenv").config({ path: ".env" });
 
 async function main() {
@@ -8,21 +8,18 @@ async function main() {
   A ContractFactory in ethers.js is an abstraction used to deploy new smart contracts,
   so cryptoDevsContract here is a factory for instances of our CryptoDevs contract.
   */
-  const cryptoDevsContract = await ethers.getContractFactory("CryptoDevs");
+  const CarFactoryContract = await ethers.getContractFactory("CarFactory");
 
   // deploy the contract
-  const deployedCryptoDevsContract = await cryptoDevsContract.deploy(
-    metadataURL,
-    whitelistContract
-  );
+  const deployedCarFactoryContract = await CarFactoryContract.deploy();
 
   // Wait for it to finish deploying
-  await deployedCryptoDevsContract.deployed();
+  await deployedCarFactoryContract.deployed();
 
   // print the address of the deployed contract
   console.log(
-    "Crypto Devs Contract Address:",
-    deployedCryptoDevsContract.address
+    "CarFactory contract address:",
+    deployedCarFactoryContract.address
   );
 }
 

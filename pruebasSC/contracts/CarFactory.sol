@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.17;
 
 // Uncomment this line to use console.log
 // import "hardhat/console.sol";
@@ -35,10 +35,6 @@ contract CarFactory{
     // Función para obtener la dirección del contrato Car a partir de la matrícula
   function getCarByLicensePlate(string memory _licensePlate) public view returns(address) {
      return licensePlateToCar[_licensePlate];
-  }
-
-  function getAllCars() public view returns(address[] memory){
-    returns cars;
   }
 
 }
