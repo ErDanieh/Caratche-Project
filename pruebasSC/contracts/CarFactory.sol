@@ -54,4 +54,8 @@ contract CarFactory {
     function getYear(string memory _licensePlate)public view returns (uint){
         return Car(address(licensePlateToCar[_licensePlate])).getYearCar();
     }
+
+    function setRegistrationDate(string memory _licensePlate, uint _newRegistrationDate) public {
+      Car(address(licensePlateToCar[_licensePlate])).setRegistrationDateCar(_newRegistrationDate);
+    }
 }

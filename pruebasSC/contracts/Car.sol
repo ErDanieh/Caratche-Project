@@ -65,4 +65,9 @@ contract Car {
       return registrationDate;
     }
  
+    //Cambia la fecha de matriculacion
+    function setRegistrationDateCar(uint _newRegistrationDate) public {
+      registrationDate = _newRegistrationDate;
+    }
+
 }
