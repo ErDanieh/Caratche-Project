@@ -8,7 +8,7 @@ contract Car {
     string public licensePlate;
     uint public registrationDate;
     address[] public ownerHistory;
-    uint[] public mileageHistory;
+    uint[] public kilometrajeHistory;
     string[4] public photos;
 
     constructor(
@@ -28,25 +28,41 @@ contract Car {
         ownerHistory.push(msg.sender); // El creador del contrato se convierte en el primer dueño
     }
 
-    function addOwner(address newOwner) public {
+    function addOwnerCar(address newOwner) public {
         require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede transferir la propiedad.");
         ownerHistory.push(newOwner);
     }
 
-    function addMileage(uint newMileage) public {
+    
+    //Funcion para devolver el modelo
+    function getMakerCar() public view returns (string memory){
+        return make;
+    }
+ 
+    //Funcion para anadir medida de kilometraje
+    function addKilometrajeCar(uint newMileage) public {
         require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede agregar kilometraje.");
-        mileageHistory.push(newMileage);
+        kilometrajeHistory.push(newMileage);
     }
 
-    function getOwnerHistory() public view returns (address[] memory) {
+    //Devolver las direcciones de todos los duenos
+    function getOwnerHistoryCar() public view returns (address[] memory) {
         return ownerHistory;
     }
 
-    function getMileageHistory() public view returns (uint[] memory) {
-        return mileageHistory;
+    //Devuelve el array con el historial de kilometrajes medidos
+    function getKilometrajeHistoryCar() public view returns (uint[] memory) {
+        return kilometrajeHistory;
     }
 
-    function getYear() public view returns (uint){
+    //Devuelve el ano de creacion del coche
+    function getYearCar() public view returns (uint){
         return year;
     }
+
+    //Devuelve la fecha de matriculacion
+    function getRegistrationDateCar() public view returns (uint) {
+      return registrationDate;
+    }
+ 
 }

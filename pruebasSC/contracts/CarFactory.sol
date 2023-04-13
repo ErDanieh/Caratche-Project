@@ -36,7 +36,22 @@ contract CarFactory {
         return cars;
     }
 
+    //Funciones para interactuar con los contratos hijos
+    
+    function getMaker(string memory _licensePlate)public view returns (string memory){
+        return Car(address(licensePlateToCar[_licensePlate])).getMakerCar();
+    }
+    
+    function getRegistrationDate(string memory _licensePlate)public view returns (uint){ 
+      return Car(address(licensePlateToCar[_licensePlate])).getRegistrationDateCar();
+    } 
+
+
+    function getKilometrajeHistory(string memory _licensePlate)public view returns (uint[] memory){ 
+      return Car(address(licensePlateToCar[_licensePlate])).getKilometrajeHistoryCar();
+    }
+
     function getYear(string memory _licensePlate)public view returns (uint){
-        return Car(address(licensePlateToCar[_licensePlate])).getYear();
+        return Car(address(licensePlateToCar[_licensePlate])).getYearCar();
     }
 }
