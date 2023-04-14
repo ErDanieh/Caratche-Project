@@ -1,2 +1,2 @@
-export const CARFACTORY_CONTRACT_ADDRESS = "address of your NFT contract";
-export const abi = "---your abi---";
+export const abi = 
+export const NFT_CONTRACT_ADDRESS = "address of your NFT contract"
