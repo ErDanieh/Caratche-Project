@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.17;
 
+import "./CarData.sol";
+
 contract Car {
     string public make;
     string public model;
@@ -11,21 +13,8 @@ contract Car {
     uint[] public kilometrajeHistory;
     string[4] public photos;
 
-    struct Accident {
-      string accidentType;
-      uint accidentDate;
-      string description;
-    }
-
-    Accident[] public accidents;
-
-    struct Repair {
-        string repairType;
-        uint repairDate;
-        string description;
-    }
-
-    Repair[] public repairs;
+    CarData.Repair[] public repairs;
+    CarData.Accident[] public accidents;
 
     constructor(
         string memory _make,
@@ -92,12 +81,13 @@ contract Car {
         string memory _description
     ) public {
         require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede agregar reparaciones.");
-        repairs.push(Repair({repairType: _repairType, repairDate: _repairDate, description: _description}));
+        repairs.push(CarData.Repair({repairType: _repairType, repairDate: _repairDate, description: _description}));
+    }
+    
+    function getRepairs() public view returns (CarData.Repair[] memory) {
+      return repairs;
     }
 
-    function getRepairs() public view returns (Repair[] memory) {
-        return repairs;
-    }
 
     function addAccident(
         string memory _accidentType,
@@ -105,10 +95,10 @@ contract Car {
         string memory _description
     ) public {
         require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede agregar reparaciones.");
-        accidents.push(Accident({accidentType: _accidentType, accidentDate: _accidentDate, description: _description}));
+        accidents.push(CarData.Accident({accidentType: _accidentType, accidentDate: _accidentDate, description: _description}));
     }
 
-    function getAccidents() public view returns (Accident[] memory) {
+    function getAccidents() public view returns (CarData.Accident[] memory) {
         return accidents;
     }
 }

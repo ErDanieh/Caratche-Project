@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.17;
 
+import "./CarData.sol";
 import "./Car.sol";
 
 contract CarFactory {
@@ -74,4 +75,10 @@ contract CarFactory {
     ) public {
         Car(address(licensePlateToCar[_licensePlate])).addAccident(_accidentType, _accidentDate, _description);
     }
+
+    function getReparationOfCar(string memory _licensePlate) public view returns (CarData.Repair[] memory){
+        CarData.Repair[] memory repairs = Car(address(licensePlateToCar[_licensePlate])).getRepairs();
+        return repairs;
+    }
+
 }

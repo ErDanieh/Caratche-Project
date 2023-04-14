@@ -65,7 +65,7 @@ export default function Home() {
       setCarMaker(await contract.getMaker(searchTerm));
       console.log(carMaker);
       setRegistrationDate(await contract.getRegistrationDate(searchTerm));
-      
+      console.log(carRegistrationDate); 
 
     } catch (err) {
       console.error(err);
