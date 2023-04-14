@@ -246,6 +246,42 @@ export const abi = [
           "type": "string"
         }
       ],
+      "name": "getReparationOfCar",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "repairType",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "repairDate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct CarData.Repair[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_licensePlate",
+          "type": "string"
+        }
+      ],
       "name": "getYear",
       "outputs": [
         {
@@ -295,4 +331,7 @@ export const abi = [
       "type": "function"
     }
   ]
-export const CARFACTORY_CONTRACT_ADDRESS = "0xEe7C5826C4b249C51Be8BE9a1e8EB9Ed29fa21b7"
+
+
+export const CARFACTORY_CONTRACT_ADDRESS = "0x56845939c6eD053E893deaFE7d4437EcE48a961A"
+
