@@ -1,13 +1,8 @@
-  const { ethers } = require("hardhat");
+const { ethers } = require("hardhat");
 require("dotenv").config({ path: ".env" });
+require("@nomiclabs/hardhat-etherscan");
 
 async function main() {
-  // Address of the whitelist contract that you deployed in the previous module
-  // URL from where we can extract the metadata for a Crypto Dev NFT
-  /*
-  A ContractFactory in ethers.js is an abstraction used to deploy new smart contracts,
-  so cryptoDevsContract here is a factory for instances of our CryptoDevs contract.
-  */
   const CarFactoryContract = await ethers.getContractFactory("CarFactory");
 
   // deploy the contract
@@ -15,6 +10,15 @@ async function main() {
 
   // Wait for it to finish deploying
   await deployedCarFactoryContract.deployed();
+
+  // If contract is not being deployed to the localhost network, verify.
+
+  console.log("Verifying contract, waiting 6 tx for propagation...");
+  await deployedCarFactoryContract.deployTransaction.wait(6);
+  await hre.run("verify:verify", {
+    address: deployedCarFactoryContract.address,
+    constructorArguments: [],
+  });
 
   // print the address of the deployed contract
   console.log(

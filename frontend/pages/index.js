@@ -2,13 +2,20 @@ import { Contract, providers, utils } from "ethers";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
-//import { abi, NFT_CONTRACT_ADDRESS } from "../constants";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
+  const [carAddress, setCarAddress] = useState("");
+  const [carMaker, setCarMaker] = useState("");
+  const [carRegistrationDate, setRegistrationDate] = useState(0);
+  const [carYear, setYear] = useState(0);
+   
 
   const connectWallet = async () => {
     try {
@@ -48,18 +55,32 @@ export default function Home() {
     }
   }, [walletConnected]);
 
-  const handleChange = (event) => {
+  const getCar = async () => {
+    try {
+      const provider = await getProviderOrSigner();
+      const contract = new Contract(CARFACTORY_CONTRACT_ADDRESS, abi, provider);
+
+      setCarAddress(await contract.getCarByLicensePlate(searchTerm));
+      console.log(carAddress); 
+      setCarMaker(await contract.getMaker(searchTerm));
+      console.log(carMaker);
+      setRegistrationDate(await contract.getRegistrationDate(searchTerm));
+      
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
+    console.log(event.target.value);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (searchTerm.trim()) {
-      onSearch(searchTerm);
-    }
   };
 
-  //Funcion para renderizar el boton de conectar la wallet
   const connectWalletAndRenderSearch = () => {
     if (!walletConnected) {
       return (
@@ -73,15 +94,36 @@ export default function Home() {
       console.log("Conectada wallet");
       return (
         <div>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Buscar..."
-              value={searchTerm}
-              onChange={handleChange}
-            />
-            <button type="submit">Buscar</button>
-          </form>
+          <Form
+            className="note-creator"
+            style={{ width: "500px" }}
+            onSubmit={handleSubmit}
+          >
+            <Form.Group className="mb-3" controlId="formBasicTitle">
+              <Form.Label>Matrícula del vehículo</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Introduzca la matrícula"
+                value={searchTerm}
+                onChange={handleInputChange}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") event.preventDefault();
+                }}
+              />
+              <Form.Text className="text-muted">
+                Introduzca la matrícula del vehículo y presione Enter para
+                buscar.
+              </Form.Text>
+            </Form.Group>
+          </Form>
+          <Button
+            variant="primary"
+            type="submit"
+            onClick={getCar}
+            className={styles.button}
+          >
+            Buscar
+          </Button>
         </div>
       );
     }
@@ -98,16 +140,12 @@ export default function Home() {
       <div className={styles.main}>
         <div>
           <h1 className={styles.title}>Welcome to Caratche</h1>
-          <div className={styles.description}>
-            Your car at the chain
-          </div>
+          <div className={styles.description}>Your car at the chain</div>
           {connectWalletAndRenderSearch()}
         </div>
       </div>
 
-      <footer className={styles.footer}>
-        TFG Made by Daniel Asensi Roch
-      </footer>
+      <footer className={styles.footer}>TFG Made by Daniel Asensi Roch</footer>
     </div>
   );
 }

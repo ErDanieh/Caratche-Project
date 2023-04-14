@@ -24,8 +24,6 @@ contract CarFactory {
         emit NewCar(address(newCar), _make, _model, _year, _licensePlate);
     }
 
-
-
     function getCarByLicensePlate(string memory _licensePlate) public view returns (address) {
         
         return licensePlateToCar[_licensePlate];
@@ -57,5 +55,23 @@ contract CarFactory {
 
     function setRegistrationDate(string memory _licensePlate, uint _newRegistrationDate) public {
       Car(address(licensePlateToCar[_licensePlate])).setRegistrationDateCar(_newRegistrationDate);
+    }
+
+    function addRepairToCar(
+        string memory _licensePlate,
+        string memory _repairType,
+        uint _repairDate,
+        string memory _description
+    ) public {
+        Car(address(licensePlateToCar[_licensePlate])).addRepair(_repairType, _repairDate, _description);
+    }
+
+    function addAccidenteToCar(
+        string memory _licensePlate,
+        string memory _accidentType,
+        uint _accidentDate,
+        string memory _description
+    ) public {
+        Car(address(licensePlateToCar[_licensePlate])).addAccident(_accidentType, _accidentDate, _description);
     }
 }

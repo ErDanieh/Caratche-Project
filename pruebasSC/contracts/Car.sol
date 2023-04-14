@@ -11,6 +11,22 @@ contract Car {
     uint[] public kilometrajeHistory;
     string[4] public photos;
 
+    struct Accident {
+      string accidentType;
+      uint accidentDate;
+      string description;
+    }
+
+    Accident[] public accidents;
+
+    struct Repair {
+        string repairType;
+        uint repairDate;
+        string description;
+    }
+
+    Repair[] public repairs;
+
     constructor(
         string memory _make,
         string memory _model,
@@ -70,4 +86,29 @@ contract Car {
       registrationDate = _newRegistrationDate;
     }
 
+    function addRepair(
+        string memory _repairType,
+        uint _repairDate,
+        string memory _description
+    ) public {
+        require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede agregar reparaciones.");
+        repairs.push(Repair({repairType: _repairType, repairDate: _repairDate, description: _description}));
+    }
+
+    function getRepairs() public view returns (Repair[] memory) {
+        return repairs;
+    }
+
+    function addAccident(
+        string memory _accidentType,
+        uint _accidentDate,
+        string memory _description
+    ) public {
+        require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede agregar reparaciones.");
+        accidents.push(Accident({accidentType: _accidentType, accidentDate: _accidentDate, description: _description}));
+    }
+
+    function getAccidents() public view returns (Accident[] memory) {
+        return accidents;
+    }
 }
