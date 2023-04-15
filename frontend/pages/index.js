@@ -3,6 +3,7 @@ import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
 import Button from "react-bootstrap/Button";
+import Card from 'react-bootstrap/Card';
 import Form from "react-bootstrap/Form";
 import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
@@ -15,7 +16,6 @@ export default function Home() {
   const [carMaker, setCarMaker] = useState("");
   const [carRegistrationDate, setRegistrationDate] = useState(0);
   const [carYear, setYear] = useState(0);
-   
 
   const connectWallet = async () => {
     try {
@@ -32,8 +32,8 @@ export default function Home() {
 
     const { chainId } = await web3Provider.getNetwork();
     if (chainId !== 80001) {
-      window.alert("Change the network to Goerli");
-      throw new Error("Change network to Goerli");
+      window.alert("Change the network to Mumbai");
+      throw new Error("Change network to Mumbai");
     }
 
     if (needSigner) {
@@ -61,11 +61,14 @@ export default function Home() {
       const contract = new Contract(CARFACTORY_CONTRACT_ADDRESS, abi, provider);
 
       setCarAddress(await contract.getCarByLicensePlate(searchTerm));
-      console.log(carAddress); 
+      console.log(carAddress);
       setCarMaker(await contract.getMaker(searchTerm));
       console.log(carMaker);
       setRegistrationDate(await contract.getRegistrationDate(searchTerm));
-      console.log(carRegistrationDate); 
+      console.log(carRegistrationDate);
+
+      console.log(await contract.getKilometrajeHistory(searchTerm));
+      console.log(await contract.getReparationOfCar(searchTerm));
 
     } catch (err) {
       console.error(err);
@@ -95,8 +98,6 @@ export default function Home() {
       return (
         <div>
           <Form
-            className="note-creator"
-            style={{ width: "500px" }}
             onSubmit={handleSubmit}
           >
             <Form.Group className="mb-3" controlId="formBasicTitle">
@@ -110,9 +111,9 @@ export default function Home() {
                   if (event.key === "Enter") event.preventDefault();
                 }}
               />
+              <br/>
               <Form.Text className="text-muted">
-                Introduzca la matrícula del vehículo y presione Enter para
-                buscar.
+                Introduzca la matrícula del vehículo y presione el boton de busqueda.
               </Form.Text>
             </Form.Group>
           </Form>
@@ -125,6 +126,29 @@ export default function Home() {
             Buscar
           </Button>
         </div>
+      );
+    }
+  };
+
+  const renderCarCard = () => {
+    if (carAddress == "0x0000000000000000000000000000000000000000") {
+      return <h1>This vehicle doesent exist</h1>;
+    } else {
+      return (
+        <Card className="text-center">
+          <Card.Header>Fabricante: {carMaker}</Card.Header>
+          <Card.Body>
+            <Card.Title></Card.Title>
+            <Card.Text>
+              With supporting text below as a natural lead-in to additional
+              content.
+            </Card.Text>
+            <Button variant="primary">Go somewhere</Button>
+          </Card.Body>
+          <Card.Footer className="text-muted">
+            Contract address: {carAddress}
+          </Card.Footer>
+        </Card>
       );
     }
   };
@@ -142,6 +166,7 @@ export default function Home() {
           <h1 className={styles.title}>Welcome to Caratche</h1>
           <div className={styles.description}>Your car at the chain</div>
           {connectWalletAndRenderSearch()}
+          {renderCarCard()}
         </div>
       </div>
 

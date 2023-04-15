@@ -163,6 +163,19 @@ export const abi = [
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "getAllLicensePlates",
+      "outputs": [
+        {
+          "internalType": "string[]",
+          "name": "",
+          "type": "string[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "string",
@@ -333,5 +346,5 @@ export const abi = [
   ]
 
 
-export const CARFACTORY_CONTRACT_ADDRESS = "0x56845939c6eD053E893deaFE7d4437EcE48a961A"
+export const CARFACTORY_CONTRACT_ADDRESS = "0x9be747933f87e5dAF244bF4aCe88FA17a8657961"
 

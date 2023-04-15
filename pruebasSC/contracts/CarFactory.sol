@@ -35,6 +35,16 @@ contract CarFactory {
         return cars;
     }
 
+    // Función para obtener todas las matrículas de los coches
+    function getAllLicensePlates() public view returns (string[] memory) {
+        string[] memory licensePlates = new string[](cars.length);
+        for (uint i = 0; i < cars.length; i++) {
+            Car car = Car(cars[i]);
+            licensePlates[i] = car.licensePlate();
+        }
+        return licensePlates;
+    }
+
     //Funciones para interactuar con los contratos hijos
     
     function getMaker(string memory _licensePlate)public view returns (string memory){

@@ -14,7 +14,9 @@ async function main() {
   // If contract is not being deployed to the localhost network, verify.
 
   console.log("Verifying contract, waiting 6 tx for propagation...");
+
   await deployedCarFactoryContract.deployTransaction.wait(6);
+
   await hre.run("verify:verify", {
     address: deployedCarFactoryContract.address,
     constructorArguments: [],
