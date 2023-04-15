@@ -3,7 +3,7 @@ import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
 import Button from "react-bootstrap/Button";
-import Card from 'react-bootstrap/Card';
+import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
@@ -111,9 +111,10 @@ export default function Home() {
                   if (event.key === "Enter") event.preventDefault();
                 }}
               />
-              <br/>
+              <br />
               <Form.Text className="text-muted">
-                Introduzca la matrícula del vehículo y presione el boton de busqueda.
+                Introduzca la matrícula del vehículo y presione el boton de
+                busqueda.
               </Form.Text>
             </Form.Group>
           </Form>
@@ -121,7 +122,6 @@ export default function Home() {
             variant="primary"
             type="submit"
             onClick={getCar}
-            className={styles.button}
           >
             Buscar
           </Button>
@@ -131,25 +131,27 @@ export default function Home() {
   };
 
   const renderCarCard = () => {
-    if (carAddress == "0x0000000000000000000000000000000000000000") {
-      return <h1>This vehicle doesent exist</h1>;
-    } else {
-      return (
-        <Card className="text-center">
-          <Card.Header>Fabricante: {carMaker}</Card.Header>
-          <Card.Body>
-            <Card.Title></Card.Title>
-            <Card.Text>
-              With supporting text below as a natural lead-in to additional
-              content.
-            </Card.Text>
-            <Button variant="primary">Go somewhere</Button>
-          </Card.Body>
-          <Card.Footer className="text-muted">
-            Contract address: {carAddress}
-          </Card.Footer>
-        </Card>
-      );
+    if (carAddress != "") {
+      if (carAddress == "0x0000000000000000000000000000000000000000" || carAddress == "") {
+        return <h1>This vehicle doesent exist or is not registered</h1>;
+      } else {
+        return (
+          <Card className="text-center">
+            <Card.Header>Fabricante: {carMaker}</Card.Header>
+            <Card.Body>
+              <Card.Title></Card.Title>
+              <Card.Text>
+                With supporting text below as a natural lead-in to additional
+                content.
+              </Card.Text>
+              <Button variant="primary">Go somewhere</Button>
+            </Card.Body>
+            <Card.Footer className="text-muted">
+              Contract address: {carAddress}
+            </Card.Footer>
+          </Card>
+        );
+      }
     }
   };
 
@@ -157,20 +159,20 @@ export default function Home() {
     <div>
       <Head>
         <title>Caratche</title>
-        <meta name="description" content="Whitelist-Dapp" />
+        <meta name="description" content="Caratche" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className={styles.main}>
+      <div>
         <div>
-          <h1 className={styles.title}>Welcome to Caratche</h1>
-          <div className={styles.description}>Your car at the chain</div>
+          <h1>Welcome to Caratche</h1>
+          <div>Your car at the chain</div>
           {connectWalletAndRenderSearch()}
           {renderCarCard()}
         </div>
       </div>
 
-      <footer className={styles.footer}>TFG Made by Daniel Asensi Roch</footer>
+      <footer>TFG Made by Daniel Asensi Roch</footer>
     </div>
   );
 }
