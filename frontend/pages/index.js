@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
@@ -69,7 +70,6 @@ export default function Home() {
 
       console.log(await contract.getKilometrajeHistory(searchTerm));
       console.log(await contract.getReparationOfCar(searchTerm));
-
     } catch (err) {
       console.error(err);
     }
@@ -132,7 +132,10 @@ export default function Home() {
 
   const renderCarCard = () => {
     if (carAddress != "") {
-      if (carAddress == "0x0000000000000000000000000000000000000000" || carAddress == "") {
+      if (
+        carAddress == "0x0000000000000000000000000000000000000000" ||
+        carAddress == ""
+      ) {
         return <h1>This vehicle doesent exist or is not registered</h1>;
       } else {
         return (
@@ -157,22 +160,25 @@ export default function Home() {
 
   return (
     <div>
-      <Head>
-        <title>Caratche</title>
-        <meta name="description" content="Caratche" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <div className="container">
+        <Head>
+          <title>Caratche</title>
+          <meta name="description" content="Caratche" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <div>
         <div>
-          <h1>Welcome to Caratche</h1>
-          <div>Your car at the chain</div>
-          {connectWalletAndRenderSearch()}
-          {renderCarCard()}
+          <div>
+            <h1>Welcome to Caratche</h1>
+            <div>Your car at the chain</div>
+            {connectWalletAndRenderSearch()}
+            {renderCarCard()}
+          </div>
         </div>
       </div>
-
-      <footer>TFG Made by Daniel Asensi Roch</footer>
+      <footer className="text-center text-white my-5">
+        TFG Made by Daniel Asensi Roch
+      </footer>
     </div>
   );
 }
