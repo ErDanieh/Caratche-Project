@@ -12,6 +12,7 @@ contract Car {
     address[] public ownerHistory;
     uint[] public kilometrajeHistory;
     string[4] public photos;
+    address public actualOwner;
 
     CarData.Repair[] public repairs;
     CarData.Accident[] public accidents;
@@ -30,11 +31,33 @@ contract Car {
         licensePlate = _licensePlate;
         registrationDate = _registrationDate;
         photos = _photos;
+        actualOwner = msg.sender;
         ownerHistory.push(msg.sender); // El creador del contrato se convierte en el primer dueño
     }
+    
+    function setPhotos(string memory p1, string memory p2, string memory p3, string memory p4) public{
+      photos[0] = p1;
+      photos[1] = p2;
+      photos[2] = p3;
+      photos[3] = p4;
+    }
+
+    function setNewOwner(address newOwner) public{
+      actualOwner = newOwner;
+      ownerHistory.push(msg.sender);
+    }
+
+    function getActualOwner() public view returns (address){
+      return actualOwner;
+    }
+
+
+    function getNumberOfOwners() public view returns(uint){
+      return ownerHistory.length;
+    }
+
 
     function addOwnerCar(address newOwner) public {
-        require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede transferir la propiedad.");
         ownerHistory.push(newOwner);
     }
 
@@ -46,7 +69,6 @@ contract Car {
  
     //Funcion para anadir medida de kilometraje
     function addKilometrajeCar(uint newMileage) public {
-        require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede agregar kilometraje.");
         kilometrajeHistory.push(newMileage);
     }
 
@@ -75,12 +97,12 @@ contract Car {
       registrationDate = _newRegistrationDate;
     }
 
+    //Funcion para anadir una reparacion 
     function addRepair(
         string memory _repairType,
         uint _repairDate,
         string memory _description
     ) public {
-        require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede agregar reparaciones.");
         repairs.push(CarData.Repair({repairType: _repairType, repairDate: _repairDate, description: _description}));
     }
     
@@ -89,12 +111,12 @@ contract Car {
     }
 
 
+    //Funcion para anadir un accidente
     function addAccident(
         string memory _accidentType,
         uint _accidentDate,
         string memory _description
     ) public {
-        require(msg.sender == ownerHistory[ownerHistory.length - 1], "Solo el owner actual puede agregar reparaciones.");
         accidents.push(CarData.Accident({accidentType: _accidentType, accidentDate: _accidentDate, description: _description}));
     }
 
