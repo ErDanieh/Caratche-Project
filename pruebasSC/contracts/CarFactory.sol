@@ -101,6 +101,11 @@ contract CarFactory is AccessControl {
       Car(address(licensePlateToCar[_licensePlate])).getActualOwner();
     }
 
+    function setNewOnwerOfCar(string memory _licensePlate, address _newOwner) public {
+      require(Car(address(licensePlateToCar[_licensePlate])).getActualOwner() == msg.sender, "You are not the actual owner");
+        Car(address(licensePlateToCar[_licensePlate])).setNewOwner(_newOwner);
+      
+    }
     //*********************************Private role functions*********************************************
     function getAllCars() public view returns(address[] memory) {
       require(hasRole(CARFACTORY_ROLE, msg.sender), "Your can get all the cars");

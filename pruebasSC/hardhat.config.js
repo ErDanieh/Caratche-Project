@@ -6,7 +6,20 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
 
 module.exports = {
-  solidity: "0.8.17",
+  solidity: {
+    version: "0.8.17",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      },
+      outputSelection: {
+        "*": {
+          "*": ["!revertStrings"]
+        }
+      }
+    }
+  },
   networks: {
     mumbai: {
       url: QUICKNODE_HTTP_URL,
