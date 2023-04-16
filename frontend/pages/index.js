@@ -10,7 +10,6 @@ import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
 import { CreateCarForm } from "./CreateCarForm";
 
-
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
@@ -23,6 +22,7 @@ export default function Home() {
   const [countCars, setCount] = useState(0);
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState(null);
+  const [canCreateCar, setCanCreateCar] = useState(false);
 
   const connectWallet = async () => {
     try {
@@ -81,6 +81,7 @@ export default function Home() {
         });
 
         await connectWallet();
+        renderCreateCarForm();
       } else {
         // Fetch the number of cars when the wallet is connected
         fetchNumberOfCars();
@@ -103,8 +104,7 @@ export default function Home() {
       setCarModel(await contract.getModel(searchTerm));
       console.log("Marca del coche: " + carModel);
 
-
-      setRegistrationDate(await contract.getRegistrationDate(searchTerm));
+      setRegistrationDate((await contract.getRegistrationDate(searchTerm)).toNumber());
       console.log("Fecha de registro: " + carRegistrationDate);
 
       console.log("Todos los coches: " + await contract.getAllCars());
@@ -190,27 +190,52 @@ export default function Home() {
   };
 
   const renderCarCard = () => {
-    if (carAddress != "") {
+    if (carAddress !== "") {
       if (
-        carAddress == "0x0000000000000000000000000000000000000000" ||
-        carAddress == ""
+        carAddress === "0x0000000000000000000000000000000000000000" ||
+        carAddress === ""
       ) {
-        return <h1>This vehicle doesent exist or is not registered</h1>;
+        return <h1>Este vehiculo no existe o no esta registrado</h1>;
       } else {
         return (
-          <Card className="text-center">
-            <Card.Header>Vehicle founded:</Card.Header>
+          <Card
+            className="text-center"
+            style={{
+              border: "1px solid #ccc",
+              boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <Card.Header>Vehiculo encontrado:</Card.Header>
             <Card.Body>
-              <Card.Title>Fabricante: {carMaker}, Modelo: {carModel}</Card.Title>
-              <Card.Text>
-              </Card.Text>
+              <Card.Title>
+                Fabricante: {carMaker}, Modelo: {carModel}
+              </Card.Title>
+              <Card.Text>Este vehiculo ha sido fabricado en: {carYear}</Card.Text>
+              <Card.Text>Este vehiculo ha sido matriculado en: {carRegistrationDate}</Card.Text>
             </Card.Body>
             <Card.Footer className="text-muted">
-              Contract address: {carAddress}
+              Direccion del contrato: {carAddress}
             </Card.Footer>
           </Card>
         );
       }
+    }
+  };
+
+  const renderCreateCarForm = async () => {
+    try {
+      const provider = await getProviderOrSigner(true);
+      const contractLocal = new Contract(
+        CARFACTORY_CONTRACT_ADDRESS,
+        abi,
+        provider,
+      );
+      const isFactory = await contractLocal.isAFactory();
+      const isAdmin = await contractLocal.isAADmin();
+      setCanCreateCar(isFactory || isAdmin);
+      console.log(canCreateCar);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -231,7 +256,9 @@ export default function Home() {
             </div>
             {connectWalletAndRenderSearch()}
             {renderCarCard()}
-            <CreateCarForm contractInstance={contract} account={account} />
+            {canCreateCar && (
+              <CreateCarForm contractInstance={contract} account={account} />
+            )}
           </div>
         </div>
       </div>

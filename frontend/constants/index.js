@@ -628,6 +628,45 @@ export const abi = [
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "isAADmin",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isAFactory",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isAGarage",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "string",
@@ -773,5 +812,5 @@ export const abi = [
   ]
 
 
-export const CARFACTORY_CONTRACT_ADDRESS = "0x159f394cB45ef4e3dbA2855141de6aa7846995CB"
+export const CARFACTORY_CONTRACT_ADDRESS = "0x99484EB0526CBD96F26203c805D0d820d5B54eE9"
 

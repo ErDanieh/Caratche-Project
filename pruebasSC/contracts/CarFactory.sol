@@ -29,6 +29,18 @@ contract CarFactory is AccessControl {
       _setupRole(SYSADMIN_ROLE, msg.sender);
     }
     
+    function isAFactory() public view returns (bool){
+      return hasRole(CARFACTORY_ROLE, msg.sender);
+    }
+
+    function isAGarage() public view returns (bool){
+     return hasRole(GARAGE_ROLE, msg.sender); 
+    }
+
+    function isAADmin() public view returns (bool){
+     return hasRole(SYSADMIN_ROLE, msg.sender); 
+    }
+
     function createCar(
         string memory _make,
         string memory _model,
@@ -92,11 +104,6 @@ contract CarFactory is AccessControl {
         return Car(address(licensePlateToCar[_licensePlate])).getYearCar();
     }
 
-    function setRegistrationDate(string memory _licensePlate, uint _newRegistrationDate) public {
-      Car(address(licensePlateToCar[_licensePlate])).setRegistrationDateCar(_newRegistrationDate);
-    }
-
-
     function getReparationOfCar(string memory _licensePlate) public view returns (CarData.Repair[] memory){
         CarData.Repair[] memory repairs = Car(address(licensePlateToCar[_licensePlate])).getRepairs();
         return repairs;
@@ -107,26 +114,33 @@ contract CarFactory is AccessControl {
         return accidents;
     }
 
+    function getActualOwnerOfCar(string memory _licensePlate) public view returns(address){
+      return Car(address(licensePlateToCar[_licensePlate])).getActualOwner();
+    }
+
     function getPhotosOfCar(string memory _licensePlate) public view returns(CarData.Photos memory){
       return Car(address(licensePlateToCar[_licensePlate])).getPhotos();
     }
 
     function setPhotosOfCar(string memory _licensePlate,string memory p1, string memory p2, string memory p3, string memory p4) public{
+      require(hasRole(CARFACTORY_ROLE, msg.sender), "You are not a CarFactory");
        Car(address(licensePlateToCar[_licensePlate])).setPhotos(p1,p2,p3,p4);
     }
 
-    function getActualOwnerOfCar(string memory _licensePlate) public view returns(address){
-      return Car(address(licensePlateToCar[_licensePlate])).getActualOwner();
-    }
 
     function setNewOnwerOfCar(string memory _licensePlate, address _newOwner) public {
-      //require(Car(address(licensePlateToCar[_licensePlate])).getActualOwner() == msg.sender, "You are not the actual owner");
-        Car(address(licensePlateToCar[_licensePlate])).setNewOwner(_newOwner);
-      
+      require(Car(address(licensePlateToCar[_licensePlate])).getActualOwner() == msg.sender);
+        Car(address(licensePlateToCar[_licensePlate])).setNewOwner(_newOwner); 
     }
+
+    function setRegistrationDate(string memory _licensePlate, uint _newRegistrationDate) public {
+      require(hasRole(CARFACTORY_ROLE, msg.sender), "You are not a CarFactory");
+      Car(address(licensePlateToCar[_licensePlate])).setRegistrationDateCar(_newRegistrationDate);
+    }
+
     //*********************************Private role functions*********************************************
     function getAllCars() public view returns(address[] memory) {
-      require(hasRole(CARFACTORY_ROLE, msg.sender), "You can get all the cars");
+      require(hasRole(SYSADMIN_ROLE, msg.sender), "You can get all the cars");
         return cars;
     }
 
