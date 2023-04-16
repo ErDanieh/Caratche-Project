@@ -18,11 +18,15 @@ contract CarFactory is AccessControl {
     //Role para garages y ITVs 
     bytes32 public constant GARAGE_ROLE = keccak256("GARAGE_ROLE");
 
+    bytes32 public constant SYSADMIN_ROLE = keccak256("SYSADMIN_ROLE");
+
     constructor() {
       // Asigna el rol CARFACTORY_ROLE al creador del contrato
       _setupRole(CARFACTORY_ROLE, msg.sender);
       // Asigna el rol GARAGE_ROLE al creador del contrato
       _setupRole(GARAGE_ROLE, msg.sender);
+
+      _setupRole(SYSADMIN_ROLE, msg.sender);
     }
     
     function createCar(
@@ -48,16 +52,19 @@ contract CarFactory is AccessControl {
 
     // Función para obtener todas las matrículas de los coches
     function getAllLicensePlates() public view returns (string[] memory) {
+
       require(hasRole(CARFACTORY_ROLE, msg.sender), "You can not get all the licensePlates");
-        string[] memory licensePlates = new string[](cars.length);
+      
+      string[] memory licensePlates = new string[](cars.length);
         for (uint i = 0; i < cars.length; i++) {
             Car car = Car(cars[i]);
             licensePlates[i] = car.licensePlate();
         }
+        
         return licensePlates;
     }
 
-    function getNumberOfCar() public view returns (uint){
+    function getNumberOfCars() public view returns (uint){
       return cars.length;
     }
 
@@ -66,6 +73,10 @@ contract CarFactory is AccessControl {
     //*************************Funciones para usuarios publicos****************************************
     function getMaker(string memory _licensePlate)public view returns (string memory){
         return Car(address(licensePlateToCar[_licensePlate])).getMakerCar();
+    }
+
+    function getModel(string memory _licensePlate)public view returns (string memory){
+        return Car(address(licensePlateToCar[_licensePlate])).getModelCar();
     }
     
     function getRegistrationDate(string memory _licensePlate)public view returns (uint){ 
@@ -101,7 +112,6 @@ contract CarFactory is AccessControl {
     }
 
     function setPhotosOfCar(string memory _licensePlate,string memory p1, string memory p2, string memory p3, string memory p4) public{
-//      CarData.Photos({frontalPhoto: newPhotos[0], rightSidePhoto: newPhotos[1], leftSidePhoto: newPhotos[2], backSidePhoto: newPhotos[3]})
        Car(address(licensePlateToCar[_licensePlate])).setPhotos(p1,p2,p3,p4);
     }
 
@@ -116,7 +126,7 @@ contract CarFactory is AccessControl {
     }
     //*********************************Private role functions*********************************************
     function getAllCars() public view returns(address[] memory) {
-      require(hasRole(CARFACTORY_ROLE, msg.sender), "Your can get all the cars");
+      require(hasRole(CARFACTORY_ROLE, msg.sender), "You can get all the cars");
         return cars;
     }
 

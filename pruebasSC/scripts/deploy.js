@@ -1,4 +1,5 @@
 const { ethers } = require("hardhat");
+const fs = require('fs');
 require("dotenv").config({ path: ".env" });
 require("@nomiclabs/hardhat-etherscan");
 
@@ -27,6 +28,19 @@ async function main() {
     "CarFactory contract address:",
     deployedCarFactoryContract.address
   );
+
+
+
+  const data = deployedCarFactoryContract.address;
+
+  fs.writeFile('address.txt', data, (error) => {
+    if (error) {
+      console.error('Ocurrio un error al escribir en el archivo:', error);
+    } else {
+      console.log('El archivo address.txt ha sido creado y actualizado exitosamente.');
+    }
+  });
+
 }
 
 // Call the main function and catch if there is any error

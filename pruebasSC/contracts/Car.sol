@@ -70,6 +70,9 @@ contract Car {
         return make;
     }
  
+    function getModelCar() public view returns (string memory){
+      return model;
+    }
     //Funcion para anadir medida de kilometraje
     function addKilometrajeCar(uint newMileage) public {
         kilometrajeHistory.push(newMileage);

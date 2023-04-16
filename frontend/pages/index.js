@@ -15,8 +15,10 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [carAddress, setCarAddress] = useState("");
   const [carMaker, setCarMaker] = useState("");
+  const [carModel, setCarModel] = useState("");
   const [carRegistrationDate, setRegistrationDate] = useState(0);
   const [carYear, setYear] = useState(0);
+  const [countCars, setCount] = useState(0);
 
   const connectWallet = async () => {
     try {
@@ -26,7 +28,17 @@ export default function Home() {
       console.error(err);
     }
   };
-
+  const fetchNumberOfCars = async () => {
+    try {
+      const provider = await getProviderOrSigner(true);
+      const contract = new Contract(CARFACTORY_CONTRACT_ADDRESS, abi, provider);
+      const carCount = (await contract.getNumberOfCar()).toNumber();
+      setCount(carCount);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  //Para poder acceder a los role based contracts necesito poner el signer a true
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
@@ -43,33 +55,59 @@ export default function Home() {
     }
     return web3Provider;
   };
-
   useEffect(() => {
-    if (!walletConnected) {
-      web3ModalRef.current = new Web3Modal({
-        network: "mumbai",
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
+    const initializeWeb3Modal = async () => {
+      if (!walletConnected) {
+        web3ModalRef.current = new Web3Modal({
+          network: "mumbai",
+          providerOptions: {},
+          disableInjectedProvider: false,
+        });
 
-      connectWallet();
-    }
+        await connectWallet();
+      } else {
+        // Fetch the number of cars when the wallet is connected
+        fetchNumberOfCars();
+      }
+    };
+
+    initializeWeb3Modal();
   }, [walletConnected]);
 
   const getCar = async () => {
     try {
-      const provider = await getProviderOrSigner();
+      const provider = await getProviderOrSigner(true);
       const contract = new Contract(CARFACTORY_CONTRACT_ADDRESS, abi, provider);
 
       setCarAddress(await contract.getCarByLicensePlate(searchTerm));
-      console.log(carAddress);
+      console.log("Contrato del coche: " + carAddress);
       setCarMaker(await contract.getMaker(searchTerm));
-      console.log(carMaker);
+      console.log("Marca del coche: " + carMaker);
       setRegistrationDate(await contract.getRegistrationDate(searchTerm));
-      console.log(carRegistrationDate);
+      console.log("Fecha de registro: " + carRegistrationDate);
 
-      console.log(await contract.getKilometrajeHistory(searchTerm));
-      console.log(await contract.getReparationOfCar(searchTerm));
+      console.log("Todos los coches: " + await contract.getAllCars());
+      console.log(
+        "Historial de kilometraje: " +
+          await contract.getKilometrajeHistory(searchTerm),
+      );
+      console.log(
+        "Historial de reparaciones: " +
+          await contract.getReparationOfCar(searchTerm),
+      );
+      console.log(
+        "Historial de accidentes: " +
+          await contract.getAccidentOfCar(searchTerm),
+      );
+      console.log(
+        "Fotos del vehiculo: " + await contract.getPhotosOfCar(searchTerm),
+      );
+      console.log(
+        "Dueno actual del vehiculo" +
+          await contract.getActualOwnerOfCar(searchTerm),
+      );
+
+      console.log((await contract.getNumberOfCar()).toNumber());
     } catch (err) {
       console.error(err);
     }
@@ -142,7 +180,7 @@ export default function Home() {
           <Card className="text-center">
             <Card.Header>Fabricante: {carMaker}</Card.Header>
             <Card.Body>
-              <Card.Title></Card.Title>
+              <Card.Title>Fabricante: {carMaker}, Modelo: {}</Card.Title>
               <Card.Text>
                 With supporting text below as a natural lead-in to additional
                 content.
@@ -170,7 +208,9 @@ export default function Home() {
         <div>
           <div>
             <h1>Welcome to Caratche</h1>
-            <div>Your car at the chain</div>
+            <div>
+              We have {countCars} car{countCars !== 1 && "s"} in the chain
+            </div>
             {connectWalletAndRenderSearch()}
             {renderCarCard()}
           </div>
