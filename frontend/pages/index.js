@@ -8,6 +8,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
+import { CreateCarForm } from "./CreateCarForm";
+
 
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -19,20 +21,33 @@ export default function Home() {
   const [carRegistrationDate, setRegistrationDate] = useState(0);
   const [carYear, setYear] = useState(0);
   const [countCars, setCount] = useState(0);
+  const [contract, setContract] = useState(null);
+  const [account, setAccount] = useState(null);
 
   const connectWallet = async () => {
     try {
       await getProviderOrSigner();
       setWalletConnected(true);
+      const signer = await getProviderOrSigner(true);
+      const contractInstance = new Contract(
+        CARFACTORY_CONTRACT_ADDRESS,
+        abi,
+        signer,
+      );
+      setContract(contractInstance);
+
+      const address = await signer.getAddress();
+      setAccount(address);
     } catch (err) {
       console.error(err);
     }
   };
+
   const fetchNumberOfCars = async () => {
     try {
       const provider = await getProviderOrSigner(true);
       const contract = new Contract(CARFACTORY_CONTRACT_ADDRESS, abi, provider);
-      const carCount = (await contract.getNumberOfCar()).toNumber();
+      const carCount = (await contract.getNumberOfCars()).toNumber();
       setCount(carCount);
     } catch (err) {
       console.error(err);
@@ -55,6 +70,7 @@ export default function Home() {
     }
     return web3Provider;
   };
+
   useEffect(() => {
     const initializeWeb3Modal = async () => {
       if (!walletConnected) {
@@ -83,6 +99,11 @@ export default function Home() {
       console.log("Contrato del coche: " + carAddress);
       setCarMaker(await contract.getMaker(searchTerm));
       console.log("Marca del coche: " + carMaker);
+
+      setCarModel(await contract.getModel(searchTerm));
+      console.log("Marca del coche: " + carModel);
+
+
       setRegistrationDate(await contract.getRegistrationDate(searchTerm));
       console.log("Fecha de registro: " + carRegistrationDate);
 
@@ -178,14 +199,11 @@ export default function Home() {
       } else {
         return (
           <Card className="text-center">
-            <Card.Header>Fabricante: {carMaker}</Card.Header>
+            <Card.Header>Vehicle founded:</Card.Header>
             <Card.Body>
-              <Card.Title>Fabricante: {carMaker}, Modelo: {}</Card.Title>
+              <Card.Title>Fabricante: {carMaker}, Modelo: {carModel}</Card.Title>
               <Card.Text>
-                With supporting text below as a natural lead-in to additional
-                content.
               </Card.Text>
-              <Button variant="primary">Go somewhere</Button>
             </Card.Body>
             <Card.Footer className="text-muted">
               Contract address: {carAddress}
@@ -213,6 +231,7 @@ export default function Home() {
             </div>
             {connectWalletAndRenderSearch()}
             {renderCarCard()}
+            <CreateCarForm contractInstance={contract} account={account} />
           </div>
         </div>
       </div>
