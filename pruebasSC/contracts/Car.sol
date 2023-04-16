@@ -11,9 +11,9 @@ contract Car {
     uint public registrationDate;
     address[] public ownerHistory;
     uint[] public kilometrajeHistory;
-    string[4] public photos;
     address public actualOwner;
 
+    CarData.Photos public photos;
     CarData.Repair[] public repairs;
     CarData.Accident[] public accidents;
 
@@ -23,28 +23,31 @@ contract Car {
         uint _year,
         string memory _licensePlate,
         uint _registrationDate,
-        string[4] memory _photos
+        address _owner
     ) {
         make = _make;
         model = _model;
         year = _year;
         licensePlate = _licensePlate;
         registrationDate = _registrationDate;
-        photos = _photos;
-        actualOwner = msg.sender;
-        ownerHistory.push(msg.sender); // El creador del contrato se convierte en el primer dueño
+        actualOwner = _owner;
+        ownerHistory.push(_owner); // El creador del contrato se convierte en el primer dueño
     }
     
     function setPhotos(string memory p1, string memory p2, string memory p3, string memory p4) public{
-      photos[0] = p1;
-      photos[1] = p2;
-      photos[2] = p3;
-      photos[3] = p4;
+      photos.frontalPhoto = p1;
+      photos.rightSidePhoto = p2;
+      photos.leftSidePhoto = p3;
+      photos.backSidePhoto = p4;
+    }
+
+    function getPhotos() public view returns (CarData.Photos memory){
+      return photos;
     }
 
     function setNewOwner(address newOwner) public{
       actualOwner = newOwner;
-      ownerHistory.push(msg.sender);
+      ownerHistory.push(newOwner);
     }
 
     function getActualOwner() public view returns (address){

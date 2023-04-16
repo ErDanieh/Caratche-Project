@@ -13,4 +13,11 @@ library CarData {
         uint accidentDate;
         string description;
     }
+
+    struct Photos {
+        string frontalPhoto;
+        string rightSidePhoto;
+        string leftSidePhoto;
+        string backSidePhoto;
+    }
 }

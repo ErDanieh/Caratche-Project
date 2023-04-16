@@ -31,10 +31,10 @@ contract CarFactory is AccessControl {
         uint _year,
         string memory _licensePlate,
         uint _registrationDate,
-        string[4] memory _photos
+        address _walletOfOwner
     ) public {
         require(hasRole(CARFACTORY_ROLE, msg.sender), "You can not create a Car");
-        Car newCar = new Car(_make, _model, _year, _licensePlate, _registrationDate, _photos);
+        Car newCar = new Car(_make, _model, _year, _licensePlate, _registrationDate, _walletOfOwner);
         cars.push(address(newCar));
         licensePlateToCar[_licensePlate] = address(newCar);
         emit NewCar(address(newCar), _make, _model, _year, _licensePlate);
@@ -96,13 +96,21 @@ contract CarFactory is AccessControl {
         return accidents;
     }
 
+    function getPhotosOfCar(string memory _licensePlate) public view returns(CarData.Photos memory){
+      return Car(address(licensePlateToCar[_licensePlate])).getPhotos();
+    }
+
+    function setPhotosOfCar(string memory _licensePlate,string memory p1, string memory p2, string memory p3, string memory p4) public{
+//      CarData.Photos({frontalPhoto: newPhotos[0], rightSidePhoto: newPhotos[1], leftSidePhoto: newPhotos[2], backSidePhoto: newPhotos[3]})
+       Car(address(licensePlateToCar[_licensePlate])).setPhotos(p1,p2,p3,p4);
+    }
 
     function getActualOwnerOfCar(string memory _licensePlate) public view returns(address){
-      Car(address(licensePlateToCar[_licensePlate])).getActualOwner();
+      return Car(address(licensePlateToCar[_licensePlate])).getActualOwner();
     }
 
     function setNewOnwerOfCar(string memory _licensePlate, address _newOwner) public {
-      require(Car(address(licensePlateToCar[_licensePlate])).getActualOwner() == msg.sender, "You are not the actual owner");
+      //require(Car(address(licensePlateToCar[_licensePlate])).getActualOwner() == msg.sender, "You are not the actual owner");
         Car(address(licensePlateToCar[_licensePlate])).setNewOwner(_newOwner);
       
     }
