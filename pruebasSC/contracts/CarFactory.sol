@@ -49,7 +49,7 @@ contract CarFactory is AccessControl {
         uint _registrationDate,
         address _walletOfOwner
     ) public {
-        require(hasRole(CARFACTORY_ROLE, msg.sender), "You can not create a Car");
+        require(hasRole(CARFACTORY_ROLE, msg.sender)|| hasRole(SYSADMIN_ROLE,msg.sender), "You can not create a Car");
         Car newCar = new Car(_make, _model, _year, _licensePlate, _registrationDate, _walletOfOwner);
         cars.push(address(newCar));
         licensePlateToCar[_licensePlate] = address(newCar);
@@ -65,7 +65,7 @@ contract CarFactory is AccessControl {
     // Función para obtener todas las matrículas de los coches
     function getAllLicensePlates() public view returns (string[] memory) {
 
-      require(hasRole(CARFACTORY_ROLE, msg.sender), "You can not get all the licensePlates");
+      require(hasRole(CARFACTORY_ROLE, msg.sender)|| hasRole(SYSADMIN_ROLE,msg.sender), "You can not get all the licensePlates");
       
       string[] memory licensePlates = new string[](cars.length);
         for (uint i = 0; i < cars.length; i++) {
@@ -118,12 +118,20 @@ contract CarFactory is AccessControl {
       return Car(address(licensePlateToCar[_licensePlate])).getActualOwner();
     }
 
-    function getPhotosOfCar(string memory _licensePlate) public view returns(CarData.Photos memory){
-      return Car(address(licensePlateToCar[_licensePlate])).getPhotos();
-    }
+    function getPhotosOfCar(string memory _licensePlate) public view returns(string[] memory){
+    CarData.Photos memory p = Car(address(licensePlateToCar[_licensePlate])).getPhotos();
+    string[] memory re = new string[](4);
+    re[0] = p.frontalPhoto;
+    re[1] = p.rightSidePhoto;
+    re[2] = p.leftSidePhoto;
+    re[3] = p.backSidePhoto;
+
+    return re;
+}
+
 
     function setPhotosOfCar(string memory _licensePlate,string memory p1, string memory p2, string memory p3, string memory p4) public{
-      require(hasRole(CARFACTORY_ROLE, msg.sender), "You are not a CarFactory");
+      require(hasRole(CARFACTORY_ROLE, msg.sender)|| hasRole(SYSADMIN_ROLE,msg.sender), "You are not a CarFactory");
        Car(address(licensePlateToCar[_licensePlate])).setPhotos(p1,p2,p3,p4);
     }
 
@@ -134,7 +142,7 @@ contract CarFactory is AccessControl {
     }
 
     function setRegistrationDate(string memory _licensePlate, uint _newRegistrationDate) public {
-      require(hasRole(CARFACTORY_ROLE, msg.sender), "You are not a CarFactory");
+      require(hasRole(CARFACTORY_ROLE, msg.sender)|| hasRole(SYSADMIN_ROLE,msg.sender), "You are not a CarFactory");
       Car(address(licensePlateToCar[_licensePlate])).setRegistrationDateCar(_newRegistrationDate);
     }
 
@@ -150,7 +158,7 @@ contract CarFactory is AccessControl {
         uint _repairDate,
         string memory _description
     ) public {
-        require(hasRole(GARAGE_ROLE,msg.sender), "You need to be a garage");
+        require(hasRole(GARAGE_ROLE,msg.sender) || hasRole(SYSADMIN_ROLE,msg.sender), "You need to be a garage");
         Car(address(licensePlateToCar[_licensePlate])).addRepair(_repairType, _repairDate, _description);
     }
 
@@ -160,7 +168,7 @@ contract CarFactory is AccessControl {
         uint _accidentDate,
         string memory _description
     ) public {
-        require(hasRole(GARAGE_ROLE, msg.sender), "You need to be a garage");
+        require(hasRole(GARAGE_ROLE, msg.sender) || hasRole(SYSADMIN_ROLE,msg.sender), "You need to be a garage");
         Car(address(licensePlateToCar[_licensePlate])).addAccident(_accidentType, _accidentDate, _description);
     }
 }

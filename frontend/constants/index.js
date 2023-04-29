@@ -1,5 +1,5 @@
 export const abi = [
-{
+    {
       "inputs": [],
       "stateMutability": "nonpayable",
       "type": "constructor"
@@ -462,31 +462,9 @@ export const abi = [
       "name": "getPhotosOfCar",
       "outputs": [
         {
-          "components": [
-            {
-              "internalType": "string",
-              "name": "frontalPhoto",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "rightSidePhoto",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "leftSidePhoto",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "backSidePhoto",
-              "type": "string"
-            }
-          ],
-          "internalType": "struct CarData.Photos",
+          "internalType": "string[]",
           "name": "",
-          "type": "tuple"
+          "type": "string[]"
         }
       ],
       "stateMutability": "view",
@@ -809,8 +787,9 @@ export const abi = [
       "stateMutability": "view",
       "type": "function"
     }
+
   ]
 
 
-export const CARFACTORY_CONTRACT_ADDRESS = "0x99484EB0526CBD96F26203c805D0d820d5B54eE9"
+export const CARFACTORY_CONTRACT_ADDRESS = "0x727FBc41cd0F6BE7228218866B4B37Ad19785229"
 

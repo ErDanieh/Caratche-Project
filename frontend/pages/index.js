@@ -1,4 +1,4 @@
-import { Contract, providers, utils } from "ethers";
+import { Contract, providers, utils, ethers } from "ethers";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
@@ -17,12 +17,37 @@ export default function Home() {
   const [carAddress, setCarAddress] = useState("");
   const [carMaker, setCarMaker] = useState("");
   const [carModel, setCarModel] = useState("");
+  const [carImages, setCarImages] = useState([]);
   const [carRegistrationDate, setRegistrationDate] = useState(0);
   const [carYear, setYear] = useState(0);
   const [countCars, setCount] = useState(0);
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState(null);
   const [canCreateCar, setCanCreateCar] = useState(false);
+  const [carReparations, setCarReparations] = useState([]);
+  const [carAccidents, setCarAccidents] = useState([]);
+
+function processAccidentsArray(array) {
+  const processedArray = [];
+  for(let i = 0; i < array.length; i++) {
+    let year;
+    if (typeof array[i][1] === 'object' && array[i][1] !== null && '_hex' in array[i][1]) {
+      // This is a BigNumber object
+      year = ethers.BigNumber.from(array[i][1]._hex).toNumber();
+    } else {
+      // This is not a BigNumber object
+      year = array[i][1];
+    }
+    const entry = {
+      type: array[i][0],
+      year: year,
+      description: array[i][2]
+    };
+    processedArray.push(entry);
+  }
+  return processedArray;
+}
+
 
   const connectWallet = async () => {
     try {
@@ -106,6 +131,21 @@ export default function Home() {
 
       setRegistrationDate((await contract.getRegistrationDate(searchTerm)).toNumber());
       console.log("Fecha de registro: " + carRegistrationDate);
+      
+      setCarImages(await contract.getPhotosOfCar(searchTerm));
+      console.log(
+        "Fotos del vehiculo: " + await contract.getPhotosOfCar(searchTerm),
+      );
+
+      setCarReparations(await contract.getReparationOfCar(searchTerm));
+      console.log("Historial de reparaciones: " + JSON.stringify(carReparations));
+
+      setCarAccidents(processAccidentsArray(await contract.getAccidentOfCar(searchTerm)));
+      console.log(
+        "Historial de accidentes: " +
+          JSON.stringify(carAccidents),
+      );
+
 
       console.log("Todos los coches: " + await contract.getAllCars());
       console.log(
@@ -113,22 +153,10 @@ export default function Home() {
           await contract.getKilometrajeHistory(searchTerm),
       );
       console.log(
-        "Historial de reparaciones: " +
-          await contract.getReparationOfCar(searchTerm),
-      );
-      console.log(
-        "Historial de accidentes: " +
-          await contract.getAccidentOfCar(searchTerm),
-      );
-      console.log(
-        "Fotos del vehiculo: " + await contract.getPhotosOfCar(searchTerm),
-      );
-      console.log(
         "Dueno actual del vehiculo" +
           await contract.getActualOwnerOfCar(searchTerm),
       );
-
-      console.log((await contract.getNumberOfCar()).toNumber());
+      console.log((await contract.getNumberOfCars()).toNumber());
     } catch (err) {
       console.error(err);
     }
@@ -211,7 +239,37 @@ export default function Home() {
                 Fabricante: {carMaker}, Modelo: {carModel}
               </Card.Title>
               <Card.Text>Este vehiculo ha sido fabricado en: {carYear}</Card.Text>
-              <Card.Text>Este vehiculo ha sido matriculado en: {carRegistrationDate}</Card.Text>
+              <Card.Text>Este vehiculo ha sido matriculado en: {carRegistrationDate}</Card.Text>           
+              {carImages.map((imageUrl, index) => (
+              <img
+                key={index}
+                src={carImages}
+                alt={`Car Image ${index + 1}`}
+                style={{ width: '100%', maxWidth: '200px' }}  
+              />
+            ))}
+
+<div className="m-10 d-flex flex-wrap justify-content-start">
+  {carAccidents.map((accident, index) => (
+    <Card
+      key={index}
+      className="m-2"
+      style={{
+        width: "18rem",
+        border: "1px solid #ccc",
+        boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+        margin: "10px",
+      }}
+    >
+      <Card.Body>
+        <Card.Title>Tipo: {accident.type}</Card.Title>
+        <Card.Text>Year: {accident.year}</Card.Text>
+        <Card.Text>Descripcion: {accident.description}</Card.Text>
+      </Card.Body>
+    </Card>
+  ))}
+</div>
+        
             </Card.Body>
             <Card.Footer className="text-muted">
               Direccion del contrato: {carAddress}
