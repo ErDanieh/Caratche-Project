@@ -10,6 +10,7 @@ import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
 import { CreateCarForm } from "./CreateCarForm";
 import CarCard from "./CarCard"
+import { AddAccident } from "./AddAccidents";
 
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -27,6 +28,7 @@ export default function Home() {
   const [canCreateCar, setCanCreateCar] = useState(false);
   const [carReparations, setCarReparations] = useState([]);
   const [carAccidents, setCarAccidents] = useState([]);
+  const [canAddAccident, setAddAccident] = useState(false);
 
 function processAccidentsArray(array) {
   const processedArray = [];
@@ -110,6 +112,7 @@ function processAccidentsArray(array) {
 
         await connectWallet();
         renderCreateCarForm();
+        renderAddAccidentForm();
       } else {
         // Fetch the number of cars when the wallet is connected
         fetchNumberOfCars();
@@ -261,6 +264,24 @@ function processAccidentsArray(array) {
     }
   };
 
+
+  const renderAddAccidentForm = async () => {
+    try {
+      const provider = await getProviderOrSigner(true);
+      const contractLocal = new Contract(
+        CARFACTORY_CONTRACT_ADDRESS,
+        abi,
+        provider,
+      );
+      const isGarage = await contractLocal.isAGarage();
+      const isAdmin = await contractLocal.isAADmin();
+      setAddAccident(isGarage || isAdmin);
+      console.log(canAddAccident);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div>
       <div className="container">
@@ -280,6 +301,10 @@ function processAccidentsArray(array) {
             {renderCarCard()}
             {canCreateCar && (
               <CreateCarForm contractInstance={contract} account={account} />
+            )}
+
+            {canAddAccident && (
+              <AddAccident contractInstance={contract} account={account} />
             )}
           </div>
         </div>
