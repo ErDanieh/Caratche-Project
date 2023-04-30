@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form";
 import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
 import { CreateCarForm } from "./CreateCarForm";
+import CarCard from "./CarCard"
 
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -228,79 +229,16 @@ function processAccidentsArray(array) {
       return <h1>Este vehiculo no existe o no esta registrado</h1>;
     } else {
       return (
-        <>
-          <Card
-            className="text-center"
-            style={{
-              border: "1px solid #ccc",
-              boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-            }}
-          >
-            <Card.Header>Vehiculo encontrado:</Card.Header>
-            <Card.Body>
-              <Card.Title>
-                Fabricante: {carMaker}, Modelo: {carModel}
-              </Card.Title>
-              <Card.Text>Este vehiculo ha sido fabricado en: {carYear}</Card.Text>
-              <Card.Text>Este vehiculo ha sido matriculado en: {carRegistrationDate}</Card.Text>           
-              {carImages.map((imageUrl, index) => (
-                <img
-                  key={index}
-                  src={carImages}
-                  alt={`Car Image ${index + 1}`}
-                  style={{ width: '100%', maxWidth: '200px' }}  
-                />
-              ))}
-            </Card.Body>
-            <Card.Footer className="text-muted">
-              Direccion del contrato: {carAddress}
-            </Card.Footer>
-          </Card>
-
-          <div className="m-10 d-flex flex-wrap justify-content-start">
-            <h4> Historial de accidentes </h4>
-            {carAccidents.map((accident, index) => (
-              <Card
-                key={index}
-                className="m-2"
-                style={{
-                  width: "18rem",
-                  border: "1px solid #ccc",
-                  boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-                  margin: "10px",
-                }}
-              >
-                <Card.Body className = "m-10">
-                  <Card.Title>Tipo: {accident.type}</Card.Title>
-                  <Card.Text>Año: {accident.year}</Card.Text>
-                  <Card.Text>Descripcion: {accident.description}</Card.Text>
-                </Card.Body>
-              </Card>
-            ))}
-          </div>
-          <div className="d-flex flex-wrap justify-content-start">
-            <h4> Historial de Reparaciones </h4>
-            {carReparations.map((accident, index) => (
-              <Card
-                key={index}
-                className="m-2"
-                style={{
-                  width: "18rem",
-                  border: "1px solid #ccc",
-                  boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-                  margin: "10px",
-                }}
-              >
-                <Card.Body className = "m-10">
-                  <Card.Title>Tipo: {accident.type}</Card.Title>
-                  <Card.Text>Year: {accident.year}</Card.Text>
-                  <Card.Text>Descripcion: {accident.description}</Card.Text>
-                </Card.Body>
-              </Card>
-            ))}
-          </div>
-
-        </>
+        <CarCard 
+          carMaker={carMaker}
+          carModel={carModel}
+          carYear={carYear}
+          carRegistrationDate={carRegistrationDate}
+          carImages={carImages}
+          carAddress={carAddress}
+          carAccidents={carAccidents}
+          carReparations={carReparations}
+        />
       );
     }
   }
