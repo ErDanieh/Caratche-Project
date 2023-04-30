@@ -11,6 +11,7 @@ import styles from "../styles/Home.module.css";
 import { CreateCarForm } from "./CreateCarForm";
 import CarCard from "./CarCard"
 import { AddAccident } from "./AddAccidents";
+import { AddReparation } from "./AddReparation";
 
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -29,6 +30,9 @@ export default function Home() {
   const [carReparations, setCarReparations] = useState([]);
   const [carAccidents, setCarAccidents] = useState([]);
   const [canAddAccident, setAddAccident] = useState(false);
+  const [canAddReparation, setAddReparation] = useState(false);
+  const [vectorYears, setVectorYears] = useState([]);
+  const [vectorKms, setVectorKms] = useState([]);
 
 function processAccidentsArray(array) {
   const processedArray = [];
@@ -113,6 +117,7 @@ function processAccidentsArray(array) {
         await connectWallet();
         renderCreateCarForm();
         renderAddAccidentForm();
+        renderAddReparationForm();
       } else {
         // Fetch the number of cars when the wallet is connected
         fetchNumberOfCars();
@@ -153,11 +158,29 @@ function processAccidentsArray(array) {
       );
 
 
+      let result = await contract.getKilometrajeHistory(searchTerm);
+
+      let years = [];
+      let kilometers = [];
+
+      result[0].forEach(item => {
+          years.push(item.toNumber());
+      });
+
+      result[1].forEach(item => {
+          kilometers.push(item.toNumber());
+      });
+
+      console.log("Años: " + years);
+      console.log("Kilómetros: " + kilometers);
+      
       console.log("Todos los coches: " + await contract.getAllCars());
-      console.log(
-        "Historial de kilometraje: " +
-          await contract.getKilometrajeHistory(searchTerm),
-      );
+
+      console.log("Todos los kilometros: " + JSON.stringify(await contract.getKilometrajeHistory(searchTerm)));
+
+      setVectorYears(years);
+      setVectorKms(kilometers);
+
       console.log(
         "Dueno actual del vehiculo" +
           await contract.getActualOwnerOfCar(searchTerm),
@@ -282,6 +305,22 @@ function processAccidentsArray(array) {
     }
   };
 
+  const renderAddReparationForm = async () => {
+    try {
+      const provider = await getProviderOrSigner(true);
+      const contractLocal = new Contract(
+        CARFACTORY_CONTRACT_ADDRESS,
+        abi,
+        provider,
+      );
+      const isGarage = await contractLocal.isAGarage();
+      const isAdmin = await contractLocal.isAADmin();
+      setAddReparation(isGarage || isAdmin);
+      console.log(canAddReparation);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div>
       <div className="container">
@@ -297,15 +336,20 @@ function processAccidentsArray(array) {
             <div>
               We have {countCars} car{countCars !== 1 && "s"} in the chain
             </div>
-            {connectWalletAndRenderSearch()}
-            {renderCarCard()}
-            {canCreateCar && (
-              <CreateCarForm contractInstance={contract} account={account} />
-            )}
+              {connectWalletAndRenderSearch()}
+              {renderCarCard()}
+              <div>
+              {canCreateCar && (
+                <CreateCarForm contractInstance={contract} account={account} />
+              )}
 
-            {canAddAccident && (
-              <AddAccident contractInstance={contract} account={account} />
-            )}
+              {canAddAccident && (
+                <AddAccident contractInstance={contract} account={account} />
+              )}
+              {canAddReparation && (
+                <AddReparation contractInstance={contract} account={account} />
+              )}
+            </div>
           </div>
         </div>
       </div>

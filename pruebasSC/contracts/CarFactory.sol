@@ -96,8 +96,8 @@ contract CarFactory is AccessControl {
     } 
 
 
-    function getKilometrajeHistory(string memory _licensePlate)public view returns (uint[] memory){ 
-      return Car(address(licensePlateToCar[_licensePlate])).getKilometrajeHistoryCar();
+    function getKilometrajeHistory(string memory _licensePlate)public view returns (uint[] memory,uint[] memory){ 
+      return Car(address(licensePlateToCar[_licensePlate])).getKilometrajeHistoryAll();
     }
 
     function getYear(string memory _licensePlate)public view returns (uint){
@@ -170,5 +170,10 @@ contract CarFactory is AccessControl {
     ) public {
         require(hasRole(GARAGE_ROLE, msg.sender) || hasRole(SYSADMIN_ROLE,msg.sender), "You need to be a garage");
         Car(address(licensePlateToCar[_licensePlate])).addAccident(_accidentType, _accidentDate, _description);
+    }
+
+    function addKilometrajeToCar(string memory _licensePlate, uint _year, uint _km) public{
+      require(hasRole(GARAGE_ROLE, msg.sender) || hasRole(SYSADMIN_ROLE,msg.sender), "You need to be a garage");
+      Car(address(licensePlateToCar[_licensePlate])).addKilometrajeCar(_year, _km);
     }
 }

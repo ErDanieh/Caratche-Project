@@ -10,8 +10,9 @@ contract Car {
     string public licensePlate;
     uint public registrationDate;
     address[] public ownerHistory;
-    uint[] public kilometrajeHistory;
     address public actualOwner;
+    mapping(uint => uint) public kilometrajeHistory;
+    uint[] public kilometrajeYears;
 
     CarData.Photos public photos;
     CarData.Repair[] public repairs;
@@ -31,7 +32,7 @@ contract Car {
         licensePlate = _licensePlate;
         registrationDate = _registrationDate;
         actualOwner = _owner;
-        ownerHistory.push(_owner); // El creador del contrato se convierte en el primer dueño
+        ownerHistory.push(_owner);
     }
     
     function setPhotos(string memory p1, string memory p2, string memory p3, string memory p4) public{
@@ -54,18 +55,14 @@ contract Car {
       return actualOwner;
     }
 
-
     function getNumberOfOwners() public view returns(uint){
       return ownerHistory.length;
     }
-
 
     function addOwnerCar(address newOwner) public {
         ownerHistory.push(newOwner);
     }
 
-    
-    //Funcion para devolver el modelo
     function getMakerCar() public view returns (string memory){
         return make;
     }
@@ -73,19 +70,30 @@ contract Car {
     function getModelCar() public view returns (string memory){
       return model;
     }
-    //Funcion para anadir medida de kilometraje
-    function addKilometrajeCar(uint newMileage) public {
-        kilometrajeHistory.push(newMileage);
+
+    function addKilometrajeCar(uint _year, uint newMileage) public {
+        if (kilometrajeHistory[_year] == 0) {
+            kilometrajeYears.push(_year);
+        }
+        kilometrajeHistory[_year] = newMileage;
+    }    
+
+    function getKilometrajeHistoryCar(uint _year) public view returns (uint) {
+        return kilometrajeHistory[_year];
     }
 
-    //Devolver las direcciones de todos los duenos
+    function getKilometrajeHistoryAll() public view returns (uint[] memory, uint[] memory) {
+        uint[] memory mileages = new uint[](kilometrajeYears.length);
+
+        for (uint i = 0; i < kilometrajeYears.length; i++) {
+            mileages[i] = kilometrajeHistory[kilometrajeYears[i]];
+        }
+
+        return (kilometrajeYears, mileages);
+    }
+
     function getOwnerHistoryCar() public view returns (address[] memory) {
         return ownerHistory;
-    }
-
-    //Devuelve el array con el historial de kilometrajes medidos
-    function getKilometrajeHistoryCar() public view returns (uint[] memory) {
-        return kilometrajeHistory;
     }
 
     //Devuelve el ano de creacion del coche
@@ -116,7 +124,6 @@ contract Car {
       return repairs;
     }
 
-
     //Funcion para anadir un accidente
     function addAccident(
         string memory _accidentType,
@@ -130,3 +137,4 @@ contract Car {
         return accidents;
     }
 }
+

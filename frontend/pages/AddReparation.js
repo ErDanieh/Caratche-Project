@@ -3,7 +3,7 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { Spinner } from "react-bootstrap";
 
 
-export const AddAccident = ({ contractInstance, account }) => {
+export const AddReparation = ({ contractInstance, account }) => {
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
   const [licensePlate, setLicensePlate] = useState("");
@@ -13,7 +13,7 @@ export const AddAccident = ({ contractInstance, account }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const tx = await contractInstance.addAccidenteToCar(licensePlate,type, year, description);
+      const tx = await contractInstance.addRepairToCar(licensePlate,type, year, description);
 
       setLoading(true);
       await tx.wait();
@@ -31,7 +31,7 @@ export const AddAccident = ({ contractInstance, account }) => {
     <Container>
       <Row className="justify-content-md-center">
         <Col md="auto">
-          <h2>Add Accident to Car</h2>
+          <h2>Add Reparation to Car</h2>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="licensePlate">
               <Form.Label>License Plate</Form.Label>
@@ -39,7 +39,7 @@ export const AddAccident = ({ contractInstance, account }) => {
             </Form.Group>
 
             <Form.Group controlId="type">
-              <Form.Label>Type of Accident</Form.Label>
+              <Form.Label>Type of Reparation</Form.Label>
               <Form.Control type="text" value={type} onChange={(e) => setType(e.target.value)} />
             </Form.Group>
 
@@ -64,7 +64,7 @@ export const AddAccident = ({ contractInstance, account }) => {
                     role="status"
                     aria-hidden="true"
                     variant="light"  // add this line to set the color of the spinner to white
-                />            &nbsp; Adding a new accident
+                />            &nbsp; Adding a new reparation
                     </>
                 ) : (
                     "Add Accident"
@@ -77,5 +77,5 @@ export const AddAccident = ({ contractInstance, account }) => {
   );
 };
 
-export default AddAccident;
+export default AddReparation;
 

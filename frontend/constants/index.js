@@ -204,6 +204,29 @@ export const abi = [
           "type": "string"
         },
         {
+          "internalType": "uint256",
+          "name": "_year",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_km",
+          "type": "uint256"
+        }
+      ],
+      "name": "addKilometrajeToCar",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_licensePlate",
+          "type": "string"
+        },
+        {
           "internalType": "string",
           "name": "_repairType",
           "type": "string"
@@ -391,6 +414,11 @@ export const abi = [
       ],
       "name": "getKilometrajeHistory",
       "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        },
         {
           "internalType": "uint256[]",
           "name": "",
@@ -786,10 +814,8 @@ export const abi = [
       ],
       "stateMutability": "view",
       "type": "function"
-    }
-
-  ]
+    }  ]
 
 
-export const CARFACTORY_CONTRACT_ADDRESS = "0x727FBc41cd0F6BE7228218866B4B37Ad19785229"
+export const CARFACTORY_CONTRACT_ADDRESS = "0xfb10b426D952E7cb6740Ad0c832a0F48b652742F"
 
