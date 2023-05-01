@@ -9,9 +9,10 @@ import Form from "react-bootstrap/Form";
 import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
 import { CreateCarForm } from "./CreateCarForm";
-import CarCard from "./CarCard"
+import CarCard from "./CarCard";
 import { AddAccident } from "./AddAccidents";
 import { AddReparation } from "./AddReparation";
+import { AddKilometers } from "./AddKilometers";
 
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -33,28 +34,32 @@ export default function Home() {
   const [canAddReparation, setAddReparation] = useState(false);
   const [vectorYears, setVectorYears] = useState([]);
   const [vectorKms, setVectorKms] = useState([]);
+  const [canAddKilometers, setCanAddKilometers] = useState(false);
 
-function processAccidentsArray(array) {
-  const processedArray = [];
-  for(let i = 0; i < array.length; i++) {
-    let year;
-    if (typeof array[i][1] === 'object' && array[i][1] !== null && '_hex' in array[i][1]) {
-      // This is a BigNumber object
-      year = ethers.BigNumber.from(array[i][1]._hex).toNumber();
-    } else {
-      // This is not a BigNumber object
-      year = array[i][1];
+  function processAccidentsArray(array) {
+    const processedArray = [];
+    for (let i = 0; i < array.length; i++) {
+      let year;
+      if (
+        typeof array[i][1] === "object" &&
+        array[i][1] !== null &&
+        "_hex" in array[i][1]
+      ) {
+        // This is a BigNumber object
+        year = ethers.BigNumber.from(array[i][1]._hex).toNumber();
+      } else {
+        // This is not a BigNumber object
+        year = array[i][1];
+      }
+      const entry = {
+        type: array[i][0],
+        year: year,
+        description: array[i][2],
+      };
+      processedArray.push(entry);
     }
-    const entry = {
-      type: array[i][0],
-      year: year,
-      description: array[i][2]
-    };
-    processedArray.push(entry);
+    return processedArray;
   }
-  return processedArray;
-}
-
 
   const connectWallet = async () => {
     try {
@@ -64,7 +69,7 @@ function processAccidentsArray(array) {
       const contractInstance = new Contract(
         CARFACTORY_CONTRACT_ADDRESS,
         abi,
-        signer,
+        signer
       );
       setContract(contractInstance);
 
@@ -140,50 +145,57 @@ function processAccidentsArray(array) {
       setCarModel(await contract.getModel(searchTerm));
       console.log("Marca del coche: " + carModel);
 
-      setRegistrationDate((await contract.getRegistrationDate(searchTerm)).toNumber());
+      setRegistrationDate(
+        (await contract.getRegistrationDate(searchTerm)).toNumber()
+      );
       console.log("Fecha de registro: " + carRegistrationDate);
-      
+
       setCarImages(await contract.getPhotosOfCar(searchTerm));
       console.log(
-        "Fotos del vehiculo: " + await contract.getPhotosOfCar(searchTerm),
+        "Fotos del vehiculo: " + (await contract.getPhotosOfCar(searchTerm))
       );
 
-      setCarReparations(processAccidentsArray( await contract.getReparationOfCar(searchTerm)));
-      console.log("Historial de reparaciones: " + JSON.stringify(carReparations));
-
-      setCarAccidents(processAccidentsArray(await contract.getAccidentOfCar(searchTerm)));
+      setCarReparations(
+        processAccidentsArray(await contract.getReparationOfCar(searchTerm))
+      );
       console.log(
-        "Historial de accidentes: " +
-          JSON.stringify(carAccidents),
+        "Historial de reparaciones: " + JSON.stringify(carReparations)
       );
 
+      setCarAccidents(
+        processAccidentsArray(await contract.getAccidentOfCar(searchTerm))
+      );
+      console.log("Historial de accidentes: " + JSON.stringify(carAccidents));
 
       let result = await contract.getKilometrajeHistory(searchTerm);
 
       let years = [];
       let kilometers = [];
 
-      result[0].forEach(item => {
-          years.push(item.toNumber());
+      result[0].forEach((item) => {
+        years.push(item.toNumber());
       });
 
-      result[1].forEach(item => {
-          kilometers.push(item.toNumber());
+      result[1].forEach((item) => {
+        kilometers.push(item.toNumber());
       });
 
       console.log("Años: " + years);
       console.log("Kilómetros: " + kilometers);
-      
-      console.log("Todos los coches: " + await contract.getAllCars());
 
-      console.log("Todos los kilometros: " + JSON.stringify(await contract.getKilometrajeHistory(searchTerm)));
+      console.log("Todos los coches: " + (await contract.getAllCars()));
+
+      console.log(
+        "Todos los kilometros: " +
+          JSON.stringify(await contract.getKilometrajeHistory(searchTerm))
+      );
 
       setVectorYears(years);
       setVectorKms(kilometers);
 
       console.log(
         "Dueno actual del vehiculo" +
-          await contract.getActualOwnerOfCar(searchTerm),
+          (await contract.getActualOwnerOfCar(searchTerm))
       );
       console.log((await contract.getNumberOfCars()).toNumber());
     } catch (err) {
@@ -213,9 +225,7 @@ function processAccidentsArray(array) {
       console.log("Conectada wallet");
       return (
         <div>
-          <Form
-            onSubmit={handleSubmit}
-          >
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicTitle">
               <Form.Label>Matrícula del vehículo</Form.Label>
               <Form.Control
@@ -234,11 +244,7 @@ function processAccidentsArray(array) {
               </Form.Text>
             </Form.Group>
           </Form>
-          <Button
-            variant="primary"
-            type="submit"
-            onClick={getCar}
-          >
+          <Button variant="primary" type="submit" onClick={getCar}>
             Buscar
           </Button>
         </div>
@@ -246,29 +252,29 @@ function processAccidentsArray(array) {
     }
   };
 
- const renderCarCard = () => {
-  if (carAddress !== "") {
-    if (
-      carAddress === "0x0000000000000000000000000000000000000000" ||
-      carAddress === ""
-    ) {
-      return <h1>Este vehiculo no existe o no esta registrado</h1>;
-    } else {
-      return (
-        <CarCard 
-          carMaker={carMaker}
-          carModel={carModel}
-          carYear={carYear}
-          carRegistrationDate={carRegistrationDate}
-          carImages={carImages}
-          carAddress={carAddress}
-          carAccidents={carAccidents}
-          carReparations={carReparations}
-        />
-      );
+  const renderCarCard = () => {
+    if (carAddress !== "") {
+      if (
+        carAddress === "0x0000000000000000000000000000000000000000" ||
+        carAddress === ""
+      ) {
+        return <h1>Este vehiculo no existe o no esta registrado</h1>;
+      } else {
+        return (
+          <CarCard
+            carMaker={carMaker}
+            carModel={carModel}
+            carYear={carYear}
+            carRegistrationDate={carRegistrationDate}
+            carImages={carImages}
+            carAddress={carAddress}
+            carAccidents={carAccidents}
+            carReparations={carReparations}
+          />
+        );
+      }
     }
-  }
-};
+  };
 
   const renderCreateCarForm = async () => {
     try {
@@ -276,17 +282,17 @@ function processAccidentsArray(array) {
       const contractLocal = new Contract(
         CARFACTORY_CONTRACT_ADDRESS,
         abi,
-        provider,
+        provider
       );
       const isFactory = await contractLocal.isAFactory();
       const isAdmin = await contractLocal.isAADmin();
       setCanCreateCar(isFactory || isAdmin);
+      setCanAddKilometers(isFactory || isAdmin);
       console.log(canCreateCar);
     } catch (err) {
       console.error(err);
     }
   };
-
 
   const renderAddAccidentForm = async () => {
     try {
@@ -294,7 +300,7 @@ function processAccidentsArray(array) {
       const contractLocal = new Contract(
         CARFACTORY_CONTRACT_ADDRESS,
         abi,
-        provider,
+        provider
       );
       const isGarage = await contractLocal.isAGarage();
       const isAdmin = await contractLocal.isAADmin();
@@ -311,7 +317,7 @@ function processAccidentsArray(array) {
       const contractLocal = new Contract(
         CARFACTORY_CONTRACT_ADDRESS,
         abi,
-        provider,
+        provider
       );
       const isGarage = await contractLocal.isAGarage();
       const isAdmin = await contractLocal.isAADmin();
@@ -321,6 +327,7 @@ function processAccidentsArray(array) {
       console.error(err);
     }
   };
+
   return (
     <div>
       <div className="container">
@@ -336,18 +343,20 @@ function processAccidentsArray(array) {
             <div>
               We have {countCars} car{countCars !== 1 && "s"} in the chain
             </div>
-              {connectWalletAndRenderSearch()}
-              {renderCarCard()}
-              <div>
+            {connectWalletAndRenderSearch()}
+            {renderCarCard()}
+            <div>
               {canCreateCar && (
                 <CreateCarForm contractInstance={contract} account={account} />
               )}
-
               {canAddAccident && (
                 <AddAccident contractInstance={contract} account={account} />
               )}
               {canAddReparation && (
                 <AddReparation contractInstance={contract} account={account} />
+              )}
+              {canAddKilometers && (
+                <AddKilometers contractInstance={contract} account={account} />
               )}
             </div>
           </div>
