@@ -13,6 +13,7 @@ import CarCard from "./CarCard";
 import { AddAccident } from "./AddAccidents";
 import { AddReparation } from "./AddReparation";
 import { AddKilometers } from "./AddKilometers";
+import { UploadImage } from "./UploadImage";
 
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -179,6 +180,9 @@ export default function Home() {
       result[1].forEach((item) => {
         kilometers.push(item.toNumber());
       });
+
+      setVectorKms(kilometers);
+      setVectorYears(years);
 
       console.log("Años: " + years);
       console.log("Kilómetros: " + kilometers);
@@ -359,6 +363,9 @@ export default function Home() {
                 <AddKilometers contractInstance={contract} account={account} />
               )}
             </div>
+          </div>
+          <div>
+            <UploadImage />
           </div>
         </div>
       </div>
