@@ -152,9 +152,7 @@ export default function Home() {
       console.log("Fecha de registro: " + carRegistrationDate);
 
       setCarImages(await contract.getPhotosOfCar(searchTerm));
-      console.log(
-        "Fotos del vehiculo: " + (await contract.getPhotosOfCar(searchTerm)),
-      );
+      console.log("Fotos del vehiculo: " + carImages[1]);
 
       setCarReparations(
         processAccidentsArray(await contract.getReparationOfCar(searchTerm)),
@@ -270,7 +268,10 @@ export default function Home() {
             carModel={carModel}
             carYear={carYear}
             carRegistrationDate={carRegistrationDate}
-            carImages={carImages}
+            carImage0 = {carImages[0]}
+            carImage1 = {carImages[1]}
+            carImage2 = {carImages[2]}
+            carImage3 = {carImages[3]}
             carAddress={carAddress}
             carAccidents={carAccidents}
             carReparations={carReparations}

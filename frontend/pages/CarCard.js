@@ -1,11 +1,24 @@
-
-import EventCard from './EventCard';
+import EventCard from "./EventCard";
 import Card from "react-bootstrap/Card";
 
-
-
-const CarCard = ({ carAddress, carMaker, carModel, carYear, carRegistrationDate, carImages, carAccidents, carReparations }) => {
-  if (!carAddress || carAddress === "0x0000000000000000000000000000000000000000") {
+const CarCard = (
+  {
+    carAddress,
+    carMaker,
+    carModel,
+    carYear,
+    carRegistrationDate,
+    carImage0,
+    carImage1,
+    carImage2,
+    carImage3,
+    carAccidents,
+    carReparations,
+  },
+) => {
+  if (
+    !carAddress || carAddress === "0x0000000000000000000000000000000000000000"
+  ) {
     return <h1>Este vehiculo no existe o no esta registrado</h1>;
   }
 
@@ -24,15 +37,33 @@ const CarCard = ({ carAddress, carMaker, carModel, carYear, carRegistrationDate,
             Fabricante: {carMaker}, Modelo: {carModel}
           </Card.Title>
           <Card.Text>Este vehiculo ha sido fabricado en: {carYear}</Card.Text>
-          <Card.Text>Este vehiculo ha sido matriculado en: {carRegistrationDate}</Card.Text>           
-          {carImages.map((imageUrl, index) => (
-            <img
-              key={index}
-              src={carImages}
-              alt={`Car Image ${index + 1}`}
-              style={{ width: '100%', maxWidth: '200px' }}  
-            />
-          ))}
+          <Card.Text>
+            Este vehiculo ha sido matriculado en: {carRegistrationDate}
+          </Card.Text>
+          <img
+            key={0}
+            src={carImage0}
+            alt={`Car Image 0`}
+            style={{ width: "100%", maxWidth: "200px" }}
+          />
+          <img
+            key={1}
+            src={carImage1}
+            alt={`Car Image 1`}
+            style={{ width: "100%", maxWidth: "200px" }}
+          />
+          <img
+            key={2}
+            src={carImage0}
+            alt={`Car Image 2`}
+            style={{ width: "100%", maxWidth: "200px" }}
+          />
+          <img
+            key={3}
+            src={carImage3}
+            alt={`Car Image 3`}
+            style={{ width: "100%", maxWidth: "200px" }}
+          />
         </Card.Body>
         <Card.Footer className="text-muted">
           Direccion del contrato: {carAddress}
@@ -40,14 +71,14 @@ const CarCard = ({ carAddress, carMaker, carModel, carYear, carRegistrationDate,
       </Card>
 
       <div className="m-10 d-flex flex-wrap justify-content-start">
-        <h4> Historial de accidentes </h4>
+        <h4>Historial de accidentes</h4>
         {carAccidents.map((accident, index) => (
           <EventCard key={index} event={accident} />
         ))}
       </div>
 
       <div className="d-flex flex-wrap justify-content-start">
-        <h4> Historial de Reparaciones </h4>
+        <h4>Historial de Reparaciones</h4>
         {carReparations.map((repair, index) => (
           <EventCard key={index} event={repair} />
         ))}
