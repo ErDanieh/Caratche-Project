@@ -1,4 +1,4 @@
-import { Contract, providers, utils, ethers } from "ethers";
+import { Contract, ethers, providers, utils } from "ethers";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
@@ -36,6 +36,7 @@ export default function Home() {
   const [vectorYears, setVectorYears] = useState([]);
   const [vectorKms, setVectorKms] = useState([]);
   const [canAddKilometers, setCanAddKilometers] = useState(false);
+  const [canUploadImage, setCanUploadImage] = useState(false);
 
   function processAccidentsArray(array) {
     const processedArray = [];
@@ -70,7 +71,7 @@ export default function Home() {
       const contractInstance = new Contract(
         CARFACTORY_CONTRACT_ADDRESS,
         abi,
-        signer
+        signer,
       );
       setContract(contractInstance);
 
@@ -122,8 +123,7 @@ export default function Home() {
 
         await connectWallet();
         renderCreateCarForm();
-        renderAddAccidentForm();
-        renderAddReparationForm();
+        renderGarageForms();
       } else {
         // Fetch the number of cars when the wallet is connected
         fetchNumberOfCars();
@@ -147,24 +147,24 @@ export default function Home() {
       console.log("Marca del coche: " + carModel);
 
       setRegistrationDate(
-        (await contract.getRegistrationDate(searchTerm)).toNumber()
+        (await contract.getRegistrationDate(searchTerm)).toNumber(),
       );
       console.log("Fecha de registro: " + carRegistrationDate);
 
       setCarImages(await contract.getPhotosOfCar(searchTerm));
       console.log(
-        "Fotos del vehiculo: " + (await contract.getPhotosOfCar(searchTerm))
+        "Fotos del vehiculo: " + (await contract.getPhotosOfCar(searchTerm)),
       );
 
       setCarReparations(
-        processAccidentsArray(await contract.getReparationOfCar(searchTerm))
+        processAccidentsArray(await contract.getReparationOfCar(searchTerm)),
       );
       console.log(
-        "Historial de reparaciones: " + JSON.stringify(carReparations)
+        "Historial de reparaciones: " + JSON.stringify(carReparations),
       );
 
       setCarAccidents(
-        processAccidentsArray(await contract.getAccidentOfCar(searchTerm))
+        processAccidentsArray(await contract.getAccidentOfCar(searchTerm)),
       );
       console.log("Historial de accidentes: " + JSON.stringify(carAccidents));
 
@@ -191,7 +191,7 @@ export default function Home() {
 
       console.log(
         "Todos los kilometros: " +
-          JSON.stringify(await contract.getKilometrajeHistory(searchTerm))
+          JSON.stringify(await contract.getKilometrajeHistory(searchTerm)),
       );
 
       setVectorYears(years);
@@ -199,7 +199,7 @@ export default function Home() {
 
       console.log(
         "Dueno actual del vehiculo" +
-          (await contract.getActualOwnerOfCar(searchTerm))
+          (await contract.getActualOwnerOfCar(searchTerm)),
       );
       console.log((await contract.getNumberOfCars()).toNumber());
     } catch (err) {
@@ -286,47 +286,32 @@ export default function Home() {
       const contractLocal = new Contract(
         CARFACTORY_CONTRACT_ADDRESS,
         abi,
-        provider
+        provider,
       );
       const isFactory = await contractLocal.isAFactory();
       const isAdmin = await contractLocal.isAADmin();
       setCanCreateCar(isFactory || isAdmin);
-      setCanAddKilometers(isFactory || isAdmin);
+      setCanUploadImage(isFactory || isAdmin);
       console.log(canCreateCar);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const renderAddAccidentForm = async () => {
+  const renderGarageForms = async () => {
     try {
       const provider = await getProviderOrSigner(true);
       const contractLocal = new Contract(
         CARFACTORY_CONTRACT_ADDRESS,
         abi,
-        provider
+        provider,
       );
       const isGarage = await contractLocal.isAGarage();
       const isAdmin = await contractLocal.isAADmin();
       setAddAccident(isGarage || isAdmin);
-      console.log(canAddAccident);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const renderAddReparationForm = async () => {
-    try {
-      const provider = await getProviderOrSigner(true);
-      const contractLocal = new Contract(
-        CARFACTORY_CONTRACT_ADDRESS,
-        abi,
-        provider
-      );
-      const isGarage = await contractLocal.isAGarage();
-      const isAdmin = await contractLocal.isAADmin();
       setAddReparation(isGarage || isAdmin);
-      console.log(canAddReparation);
+      setCanAddKilometers(isGarage || isAdmin);
+      console.log(canAddAccident);
     } catch (err) {
       console.error(err);
     }
@@ -351,7 +336,10 @@ export default function Home() {
             {renderCarCard()}
             <div>
               {canCreateCar && (
-                <CreateCarForm contractInstance={contract} account={account} />
+                <CreateCarForm
+                  contractInstance={contract}
+                  account={account}
+                />
               )}
               {canAddAccident && (
                 <AddAccident contractInstance={contract} account={account} />
@@ -362,10 +350,10 @@ export default function Home() {
               {canAddKilometers && (
                 <AddKilometers contractInstance={contract} account={account} />
               )}
+              {canUploadImage && (
+                <UploadImage contractInstance={contract} account={account} />
+              )}
             </div>
-          </div>
-          <div>
-            <UploadImage />
           </div>
         </div>
       </div>
