@@ -16,8 +16,8 @@ export const UploadImage = () => {
         maxContentLength: "Infinity",
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-          pinata_api_key: process.env.REACT_APP_PINATA_API_KEY,
-          pinata_secret_api_key: process.env.REACT_APP_PINATA_SECRET_API_KEY,
+          pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+          pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
         },
       },
     );
