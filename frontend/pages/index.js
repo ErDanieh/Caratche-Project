@@ -24,7 +24,6 @@ export default function Home() {
   const [carModel, setCarModel] = useState("");
   const [carImages, setCarImages] = useState([]);
   const [carRegistrationDate, setRegistrationDate] = useState(0);
-  const [carYear, setYear] = useState(0);
   const [countCars, setCount] = useState(0);
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState(null);
@@ -33,8 +32,6 @@ export default function Home() {
   const [carAccidents, setCarAccidents] = useState([]);
   const [canAddAccident, setAddAccident] = useState(false);
   const [canAddReparation, setAddReparation] = useState(false);
-  const [vectorYears, setVectorYears] = useState([]);
-  const [vectorKms, setVectorKms] = useState([]);
   const [canAddKilometers, setCanAddKilometers] = useState(false);
   const [canUploadImage, setCanUploadImage] = useState(false);
   const [kmsData, setKmsData] = useState(null);
@@ -156,32 +153,23 @@ export default function Home() {
       const contract = new Contract(CARFACTORY_CONTRACT_ADDRESS, abi, provider);
 
       setCarAddress(await contract.getCarByLicensePlate(searchTerm));
-      console.log("Contrato del coche: " + carAddress);
       setCarMaker(await contract.getMaker(searchTerm));
-      console.log("Marca del coche: " + carMaker);
 
       setCarModel(await contract.getModel(searchTerm));
-      console.log("Marca del coche: " + carModel);
 
       setRegistrationDate(
         (await contract.getRegistrationDate(searchTerm)).toNumber(),
       );
-      console.log("Fecha de registro: " + carRegistrationDate);
 
       setCarImages(await contract.getPhotosOfCar(searchTerm));
-      console.log("Fotos del vehiculo: " + carImages[1]);
 
       setCarReparations(
         processAccidentsArray(await contract.getReparationOfCar(searchTerm)),
-      );
-      console.log(
-        "Historial de reparaciones: " + JSON.stringify(carReparations),
       );
 
       setCarAccidents(
         processAccidentsArray(await contract.getAccidentOfCar(searchTerm)),
       );
-      console.log("Historial de accidentes: " + JSON.stringify(carAccidents));
 
       let result = await contract.getKilometrajeHistory(searchTerm);
 
@@ -200,24 +188,9 @@ export default function Home() {
       setVectorYears(years);
 
       setKmsData(createDataObject(years, kilometers));
-      console.log("Años: " + years);
-      console.log("Kilómetros: " + kilometers);
-
-      console.log("Todos los coches: " + (await contract.getAllCars()));
-
-      console.log(
-        "Todos los kilometros: " +
-          JSON.stringify(await contract.getKilometrajeHistory(searchTerm)),
-      );
 
       setVectorYears(years);
       setVectorKms(kilometers);
-
-      console.log(
-        "Dueno actual del vehiculo" +
-          (await contract.getActualOwnerOfCar(searchTerm)),
-      );
-      console.log((await contract.getNumberOfCars()).toNumber());
     } catch (err) {
       console.error(err);
     }
@@ -293,7 +266,7 @@ export default function Home() {
             carAddress={carAddress}
             carAccidents={carAccidents}
             carReparations={carReparations}
-            kilometersData={kmsData} 
+            kilometersData={kmsData}
           />
         );
       }
