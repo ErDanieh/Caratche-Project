@@ -54,7 +54,7 @@ const CarCard = (
           />
           <img
             key={2}
-            src={carImage0}
+            src={carImage2}
             alt={`Car Image 2`}
             style={{ width: "100%", maxWidth: "200px" }}
           />
