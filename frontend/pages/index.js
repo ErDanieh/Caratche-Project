@@ -37,6 +37,7 @@ export default function Home() {
   const [vectorKms, setVectorKms] = useState([]);
   const [canAddKilometers, setCanAddKilometers] = useState(false);
   const [canUploadImage, setCanUploadImage] = useState(false);
+  const [kmsData, setKmsData] = useState(null);
 
   function processAccidentsArray(array) {
     const processedArray = [];
@@ -63,6 +64,22 @@ export default function Home() {
     return processedArray;
   }
 
+  const createDataObject = (years, kilometers) => {
+    if (years.length !== kilometers.length) {
+      throw new Error(
+        "Los vectores years y kilometers deben tener la misma longitud",
+      );
+    }
+
+    const data = years.map((year, index) => {
+      return {
+        year: year,
+        kilometers: kilometers[index],
+      };
+    });
+
+    return data;
+  };
   const connectWallet = async () => {
     try {
       await getProviderOrSigner();
@@ -182,6 +199,7 @@ export default function Home() {
       setVectorKms(kilometers);
       setVectorYears(years);
 
+      setKmsData(createDataObject(years, kilometers));
       console.log("Años: " + years);
       console.log("Kilómetros: " + kilometers);
 
@@ -268,13 +286,14 @@ export default function Home() {
             carModel={carModel}
             carYear={carYear}
             carRegistrationDate={carRegistrationDate}
-            carImage0 = {carImages[0]}
-            carImage1 = {carImages[1]}
-            carImage2 = {carImages[2]}
-            carImage3 = {carImages[3]}
+            carImage0={carImages[0]}
+            carImage1={carImages[1]}
+            carImage2={carImages[2]}
+            carImage3={carImages[3]}
             carAddress={carAddress}
             carAccidents={carAccidents}
             carReparations={carReparations}
+            kilometersData={kmsData} 
           />
         );
       }

@@ -1,5 +1,6 @@
 import EventCard from "./EventCard";
 import Card from "react-bootstrap/Card";
+import { KilometersChart } from "./KilometersChart";
 
 const CarCard = (
   {
@@ -14,6 +15,7 @@ const CarCard = (
     carImage3,
     carAccidents,
     carReparations,
+    kilometersData,
   },
 ) => {
   if (
@@ -21,7 +23,6 @@ const CarCard = (
   ) {
     return <h1>Este vehiculo no existe o no esta registrado</h1>;
   }
-
   return (
     <>
       <Card
@@ -64,6 +65,7 @@ const CarCard = (
             alt={`Car Image 3`}
             style={{ width: "100%", maxWidth: "200px" }}
           />
+          <KilometersChart data={kilometersData} />
         </Card.Body>
         <Card.Footer className="text-muted">
           Direccion del contrato: {carAddress}
