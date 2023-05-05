@@ -23,6 +23,7 @@ export default function Home() {
   const [carMaker, setCarMaker] = useState("");
   const [carModel, setCarModel] = useState("");
   const [carImages, setCarImages] = useState([]);
+  const [carYear, setCarYear] = useState(0);
   const [carRegistrationDate, setRegistrationDate] = useState(0);
   const [countCars, setCount] = useState(0);
   const [contract, setContract] = useState(null);
@@ -35,6 +36,8 @@ export default function Home() {
   const [canAddKilometers, setCanAddKilometers] = useState(false);
   const [canUploadImage, setCanUploadImage] = useState(false);
   const [kmsData, setKmsData] = useState(null);
+  const [vectorYears, setVectorYears] = useState([]);
+  const [vectorKms, setVectorKms] = useState([]);
 
   function processAccidentsArray(array) {
     const processedArray = [];
@@ -154,6 +157,7 @@ export default function Home() {
 
       setCarAddress(await contract.getCarByLicensePlate(searchTerm));
       setCarMaker(await contract.getMaker(searchTerm));
+      setCarYear((await contract.getYear(searchTerm)).toNumber());
 
       setCarModel(await contract.getModel(searchTerm));
 
