@@ -74,7 +74,7 @@ const CarCard = (
         </Card.Footer>
       </Card>
 
-      <div className="m-10 d-flex flex-wrap justify-content-start">
+      <div className="d-flex flex-wrap justify-content-center">
         <h4>Historial de accidentes</h4>
         {carAccidents.map((accident, index) => (
           <EventCard key={index} event={accident} />
