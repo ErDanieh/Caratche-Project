@@ -41,31 +41,33 @@ const CarCard = (
           <Card.Text>
             Este vehiculo ha sido matriculado en: {carRegistrationDate}
           </Card.Text>
-          <img
-            key={0}
-            src={carImage0}
-            alt={`Car Image 0`}
-            style={{ width: "100%", maxWidth: "200px" }}
-          />
-          <img
-            key={1}
-            src={carImage1}
-            alt={`Car Image 1`}
-            style={{ width: "100%", maxWidth: "200px" }}
-          />
-          <img
-            key={2}
-            src={carImage2}
-            alt={`Car Image 2`}
-            style={{ width: "100%", maxWidth: "200px" }}
-          />
-          <img
-            key={3}
-            src={carImage3}
-            alt={`Car Image 3`}
-            style={{ width: "100%", maxWidth: "200px" }}
-          />
-          <KilometersChart data={kilometersData} />
+          <div className="d-flex flex-wrap justify-content-start">
+            <img
+              key={0}
+              src={carImage0}
+              alt={`Car Image 0`}
+              style={{ width: "100%", maxWidth: "200px" }}
+            />
+            <img
+              key={1}
+              src={carImage1}
+              alt={`Car Image 1`}
+              style={{ width: "100%", maxWidth: "200px" }}
+            />
+            <img
+              key={2}
+              src={carImage2}
+              alt={`Car Image 2`}
+              style={{ width: "100%", maxWidth: "200px" }}
+            />
+            <img
+              key={3}
+              src={carImage3}
+              alt={`Car Image 3`}
+              style={{ width: "100%", maxWidth: "200px" }}
+            />
+            <KilometersChart data={kilometersData} />
+          </div>
         </Card.Body>
         <Card.Footer className="text-muted">
           Direccion del contrato: {carAddress}
