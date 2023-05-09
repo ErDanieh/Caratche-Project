@@ -158,25 +158,18 @@ export default function Home() {
       setCarAddress(await contract.getCarByLicensePlate(searchTerm));
       setCarMaker(await contract.getMaker(searchTerm));
       setCarYear((await contract.getYear(searchTerm)).toNumber());
-
       setCarModel(await contract.getModel(searchTerm));
-
       setRegistrationDate(
         (await contract.getRegistrationDate(searchTerm)).toNumber(),
       );
-
       setCarImages(await contract.getPhotosOfCar(searchTerm));
-
       setCarReparations(
         processAccidentsArray(await contract.getReparationOfCar(searchTerm)),
       );
-
       setCarAccidents(
         processAccidentsArray(await contract.getAccidentOfCar(searchTerm)),
       );
-
       let result = await contract.getKilometrajeHistory(searchTerm);
-
       let years = [];
       let kilometers = [];
 
@@ -190,9 +183,7 @@ export default function Home() {
 
       setVectorKms(kilometers);
       setVectorYears(years);
-
       setKmsData(createDataObject(years, kilometers));
-
       setVectorYears(years);
       setVectorKms(kilometers);
     } catch (err) {
@@ -325,11 +316,13 @@ export default function Home() {
 
         <div>
           <div>
-            <h1>Welcome to Caratche</h1>
-            <div>
-              We have {countCars} car{countCars !== 1 && "s"} in the chain
+            <div className={styles.container}>
+              <h1>Welcome to Caratche</h1>
+              <div>
+                We have {countCars} car{countCars !== 1 && "s"} in the chain
+              </div>
+              {connectWalletAndRenderSearch()}
             </div>
-            {connectWalletAndRenderSearch()}
             {renderCarCard()}
             <div>
               {canCreateCar && (
