@@ -161,6 +161,7 @@ export default function Home() {
         (await contract.getRegistrationDate(searchTerm)).toNumber(),
       );
       setCarImages(await contract.getPhotosOfCar(searchTerm));
+      console.log(await contract.getPhotosOfCar(searchTerm));
       setCarReparations(
         processAccidentsArray(await contract.getReparationOfCar(searchTerm)),
       );
