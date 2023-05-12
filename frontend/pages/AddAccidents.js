@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import { Spinner } from "react-bootstrap";
 
 export const AddAccident = ({ contractInstance, account }) => {

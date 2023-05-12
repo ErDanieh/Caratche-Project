@@ -45,31 +45,33 @@ export const UploadImage = ({ contractInstance, account }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    //comprueba que todas las fileURLs esten llenas
-    if (fileURLs.some((url) => url === "")) {
-      setError("Por favor, sube todas las imagenes");
-    } else {
-      console.log("fileURLs: ", fileURLs);
-      console.log("licensePlate: ", licensePlate);
-      try {
-        const tx = await contractInstance.setPhotosOfCar(
-          licensePlate,
-          fileURLs[0],
-          fileURLs[1],
-          fileURLs[2],
-          fileURLs[3],
-        );
-
-        setLoading(true);
-        await tx.wait();
-        setLoading(false);
-
-        window.location.reload();
-
-        console.log("Transaction: ", tx);
-      } catch (error) {
-        console.error("Error: ", error);
+    setLoading(true);
+    try {
+      for (let i = 0; i < files.length; i++) {
+        if (!files[i]) {
+          setError(`Por favor, sube todas las imagenes`);
+          setLoading(false);
+          return;
+        }
+        await uploadImage(i);
       }
+      
+      const tx = await contractInstance.setPhotosOfCar(
+        licensePlate,
+        fileURLs[0],
+        fileURLs[1],
+        fileURLs[2],
+        fileURLs[3],
+      );
+
+      await tx.wait();
+      setLoading(false);
+      window.location.reload();
+
+      console.log("Transaction: ", tx);
+    } catch (error) {
+      console.error("Error: ", error);
+      setLoading(false);
     }
   };
 
@@ -89,7 +91,6 @@ export const UploadImage = ({ contractInstance, account }) => {
               type="file"
               onChange={(e) => handleFileChange(e, index)}
             />
-            <button onClick={() => uploadImage(index)}>Subir</button>
             {fileURLs[index] && (
               <div>
                 <p>Imagen subida exitosamente:</p>
@@ -99,6 +100,7 @@ export const UploadImage = ({ contractInstance, account }) => {
                   style={{ width: "50%" }}
                 />
                 <p>
+
                   URL:{" "}
                   <a
                     href={fileURLs[index]}
