@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Card} from "react-bootstrap";
 import { Spinner } from "react-bootstrap";
 
 
@@ -28,7 +28,7 @@ export const AddAccident = ({ contractInstance, account }) => {
   };
 
   return (
-    <Container>
+          <Card body style={{ width: '50rem' }}>
       <Row className="justify-content-md-center">
         <Col md="auto">
           <h2>Add Accident to Car</h2>
@@ -73,7 +73,7 @@ export const AddAccident = ({ contractInstance, account }) => {
           </Form>
         </Col>
       </Row>
-    </Container>
+    </Card>
   );
 };
 

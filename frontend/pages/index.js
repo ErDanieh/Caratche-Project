@@ -3,11 +3,9 @@ import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
 import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import { abi, CARFACTORY_CONTRACT_ADDRESS } from "../constants";
-import styles from "../styles/Home.module.css";
 import { CreateCarForm } from "./CreateCarForm";
 import CarCard from "./CarCard";
 import { AddAccident } from "./AddAccidents";
@@ -203,7 +201,7 @@ export default function Home() {
   const connectWalletAndRenderSearch = () => {
     if (!walletConnected) {
       return (
-        <button onClick={connectWallet} className={styles.button}>
+        <button onClick={connectWallet} variant="primary">
           Connect your wallet
         </button>
       );
@@ -212,7 +210,7 @@ export default function Home() {
     if (walletConnected) {
       console.log("Conectada wallet");
       return (
-        <div>
+        <div style={{ margin: "10px" }}>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicTitle">
               <Form.Label>Matrícula del vehículo</Form.Label>
@@ -232,9 +230,16 @@ export default function Home() {
               </Form.Text>
             </Form.Group>
           </Form>
-          <Button variant="primary" type="submit" onClick={getCar}>
-            Buscar
-          </Button>
+          <div className="d-grid gap-2 text-center">
+            <Button
+              variant="primary"
+              type="submit"
+              className="btn btn-primary btn-lg"
+              onClick={getCar}
+            >
+              Buscar
+            </Button>
+          </div>
         </div>
       );
     }
@@ -316,15 +321,16 @@ export default function Home() {
 
         <div>
           <div>
-            <div className={styles.container}>
+            <div className="text-center">
               <h1>Welcome to Caratche</h1>
-              <div>
+              <div className="m-10">
                 We have {countCars} car{countCars !== 1 && "s"} in the chain
               </div>
+
               {connectWalletAndRenderSearch()}
             </div>
             {renderCarCard()}
-            <div>
+            <div className="d-flex flex-row">
               {canCreateCar && (
                 <CreateCarForm
                   contractInstance={contract}
@@ -340,6 +346,7 @@ export default function Home() {
               {canAddKilometers && (
                 <AddKilometers contractInstance={contract} account={account} />
               )}
+
               {canUploadImage && (
                 <UploadImage contractInstance={contract} account={account} />
               )}
