@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import { Spinner } from "react-bootstrap";
 
 export const AddKilometers = ({ contractInstance, account }) => {
@@ -15,7 +15,7 @@ export const AddKilometers = ({ contractInstance, account }) => {
       const tx = await contractInstance.addKilometrajeToCar(
         licensePlate,
         year,
-        kilometers
+        kilometers,
       );
 
       setLoading(true);
@@ -31,39 +31,54 @@ export const AddKilometers = ({ contractInstance, account }) => {
   };
 
   return (
-    <Container>
-      <Row className="justify-content-md-center">
-        <Col md="auto">
+    <Card
+      style={{
+        width: "50rem",
+        border: "1px solid #ccc",
+        borderRadius: "15px",
+        boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+        margin: "15px 0 0 0",
+      }}
+    >
+      <Card.Body style={{ margin: "20px" }}>
+        <Card.Title style={{ textAlign: "center" }}>
           <h2>Add Kilometers to car</h2>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="licensePlate">
-              <Form.Label>License Plate</Form.Label>
-              <Form.Control
-                type="text"
-                value={licensePlate}
-                onChange={(e) => setLicensePlate(e.target.value)}
-              />
-            </Form.Group>
+        </Card.Title>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="licensePlate">
+            <Form.Label>License Plate</Form.Label>
+            <Form.Control
+              type="text"
+              value={licensePlate}
+              onChange={(e) => setLicensePlate(e.target.value)}
+            />
+          </Form.Group>
 
-            <Form.Group controlId="year">
-              <Form.Label>Year of the count</Form.Label>
-              <Form.Control
-                type="number"
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
-              />
-            </Form.Group>
+          <Form.Group controlId="year">
+            <Form.Label>Year of the count</Form.Label>
+            <Form.Control
+              type="number"
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+            />
+          </Form.Group>
 
-            <Form.Group controlId="kilometers">
-              <Form.Label>Kilometers</Form.Label>
-              <Form.Control
-                type="number"
-                value={kilometers}
-                onChange={(e) => setKilometers(e.target.value)}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit" disabled={loading}>
-              {loading ? (
+          <Form.Group controlId="kilometers">
+            <Form.Label>Kilometers</Form.Label>
+            <Form.Control
+              type="number"
+              value={kilometers}
+              onChange={(e) => setKilometers(e.target.value)}
+            />
+          </Form.Group>
+          <Button
+            variant="primary"
+            type="submit"
+            disabled={loading}
+            style={{ marginTop: "7px" }}
+          >
+            {loading
+              ? (
                 <>
                   <Spinner
                     as="span"
@@ -75,14 +90,14 @@ export const AddKilometers = ({ contractInstance, account }) => {
                   />{" "}
                   &nbsp; Adding a new kilometer
                 </>
-              ) : (
+              )
+              : (
                 "Add Kilometers"
               )}
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 };
 
