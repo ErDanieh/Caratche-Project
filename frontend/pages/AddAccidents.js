@@ -38,7 +38,7 @@ export const AddAccident = ({ contractInstance, account }) => {
         border: "1px solid #ccc",
         borderRadius: "15px",
         boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-        margin: "15px 0 0 0",
+        margin: "15px 5px 5px 5px",
       }}
     >
       <Card.Body style={{ margin: "20px" }}>

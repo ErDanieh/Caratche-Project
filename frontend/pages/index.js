@@ -301,7 +301,9 @@ export default function Home() {
         provider,
       );
       const isGarage = await contractLocal.isAGarage();
+      console.log(isGarage);
       const isAdmin = await contractLocal.isAADmin();
+      console.log(isAdmin);
       setAddAccident(isGarage || isAdmin);
       setAddReparation(isGarage || isAdmin);
       setCanAddKilometers(isGarage || isAdmin);
@@ -321,37 +323,35 @@ export default function Home() {
         </Head>
 
         <div>
-          <div>
-            <div className="text-center">
-              <h1>Welcome to Caratche</h1>
-              <div className="m-10">
-                We have {countCars} car{countCars !== 1 && "s"} in the chain
-              </div>
-
-              {connectWalletAndRenderSearch()}
+          <div className="text-center">
+            <h1>Welcome to Caratche</h1>
+            <div className="m-10">
+              We have {countCars} car{countCars !== 1 && "s"} in the chain
             </div>
-            {renderCarCard()}
-            <div className="d-flex flex-row">
-              {canCreateCar && (
-                <CreateCarForm
-                  contractInstance={contract}
-                  account={account}
-                />
-              )}
-              {canAddAccident && (
-                <AddAccident contractInstance={contract} account={account} />
-              )}
-              {canAddReparation && (
-                <AddReparation contractInstance={contract} account={account} />
-              )}
-              {canAddKilometers && (
-                <AddKilometers contractInstance={contract} account={account} />
-              )}
 
-              {canUploadImage && (
-                <UploadImage contractInstance={contract} account={account} />
-              )}
-            </div>
+            {connectWalletAndRenderSearch()}
+          </div>
+          {renderCarCard()}
+          <div className="d-flex justify-content-between flex-wrap">
+            {canCreateCar && (
+              <CreateCarForm
+                contractInstance={contract}
+                account={account}
+              />
+            )}
+            {canAddAccident && (
+              <AddAccident contractInstance={contract} account={account} />
+            )}
+            {canAddReparation && (
+              <AddReparation contractInstance={contract} account={account} />
+            )}
+            {canAddKilometers && (
+              <AddKilometers contractInstance={contract} account={account} />
+            )}
+
+            {canUploadImage && (
+              <UploadImage contractInstance={contract} account={account} />
+            )}
           </div>
         </div>
       </div>

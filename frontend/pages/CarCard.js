@@ -30,6 +30,7 @@ const CarCard = (
         style={{
           border: "1px solid #ccc",
           boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+          borderRadius: "15px",
         }}
       >
         <Card.Header>Vehiculo encontrado:</Card.Header>
