@@ -94,15 +94,21 @@ export const UploadImage = ({ contractInstance, account }) => {
           <h2>Update Car Photos</h2>
         </Card.Title>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="licensePlate">Matricula:</label>
-          <input
-            type="text"
-            id="licensePlate"
-            value={licensePlate}
-            onChange={(e) => setLicensePlate(e.target.value)}
-          />
+          <div style={{ textAlign: "center" }}>
+            <label htmlFor="licensePlate">Matricula:</label>
+            <p>
+              <input
+                type="text"
+                id="licensePlate"
+                value={licensePlate}
+                onChange={(e) => setLicensePlate(e.target.value)}
+              />
+            </p>
+          </div>
           {files.map((_, index) => (
+            
             <div key={index}>
+            <p>
               <input
                 type="file"
                 onChange={(e) => handleFileChange(e, index)}
@@ -127,9 +133,15 @@ export const UploadImage = ({ contractInstance, account }) => {
                   </p>
                 </div>
               )}
+            </p>
             </div>
           ))}
-          <Button variant="primary" type="submit" disabled={loading}>
+          <Button
+            variant="primary"
+            type="submit"
+            disabled={loading}
+            style={{ marginTop: "7px" }}
+          >
             {loading
               ? (
                 <>
