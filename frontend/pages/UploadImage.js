@@ -86,7 +86,7 @@ export const UploadImage = ({ contractInstance, account }) => {
         border: "1px solid #ccc",
         borderRadius: "15px",
         boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-        margin: "15px 0 0 0",
+        margin: "0 auto",
       }}
     >
       <Card.Body style={{ margin: "20px" }}>

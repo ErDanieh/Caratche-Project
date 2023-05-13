@@ -12,6 +12,8 @@ import { AddAccident } from "./AddAccidents";
 import { AddReparation } from "./AddReparation";
 import { AddKilometers } from "./AddKilometers";
 import { UploadImage } from "./UploadImage";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -332,27 +334,57 @@ export default function Home() {
             {connectWalletAndRenderSearch()}
           </div>
           {renderCarCard()}
-          <div className="d-flex justify-content-between flex-wrap">
-            {canCreateCar && (
-              <CreateCarForm
-                contractInstance={contract}
-                account={account}
-              />
-            )}
-            {canAddAccident && (
-              <AddAccident contractInstance={contract} account={account} />
-            )}
-            {canAddReparation && (
-              <AddReparation contractInstance={contract} account={account} />
-            )}
-            {canAddKilometers && (
-              <AddKilometers contractInstance={contract} account={account} />
-            )}
 
-            {canUploadImage && (
-              <UploadImage contractInstance={contract} account={account} />
-            )}
-          </div>
+          <Row className="g-4">
+            <Col xs={12} md={6}>
+              <div style={{ height: "100%", width: "100%" }}>
+                {canCreateCar && (
+                  <CreateCarForm
+                    contractInstance={contract}
+                    account={account}
+                  />
+                )}
+              </div>
+            </Col>
+            <Col xs={12} md={6}>
+              <div style={{ height: "100%", width: "100%" }}>
+                {canAddAccident && (
+                  <AddAccident contractInstance={contract} account={account} />
+                )}
+              </div>
+            </Col>
+          </Row>
+          <Row className="g-4">
+            <Col xs={12} md={6}>
+              <div style={{ height: "100%", width: "100%" }}>
+                {canAddReparation && (
+                  <AddReparation
+                    contractInstance={contract}
+                    account={account}
+                  />
+                )}
+              </div>
+            </Col>
+            <Col xs={12} md={6}>
+              <div style={{ height: "100%", width: "100%" }}>
+                {canAddKilometers && (
+                  <AddKilometers
+                    contractInstance={contract}
+                    account={account}
+                  />
+                )}
+              </div>
+            </Col>
+          </Row>
+          <Row className="g-4">
+            <Col xs={12} md={6}>
+              <div style={{ height: "100%", width: "100%" }}>
+                {canUploadImage && (
+                  <UploadImage contractInstance={contract} account={account} />
+                )}
+              </div>
+            </Col>
+          </Row>
         </div>
       </div>
       <footer className="text-center text-white my-5">
