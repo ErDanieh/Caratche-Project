@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Card, Spinner } from "react-bootstrap";
 
-export const UploadImage = ({ contractInstance }) => {
+export const UploadImage = ({ contractInstance, account }) => {
   const [files, setFiles] = useState(Array(4).fill(null));
   const [fileURLs, setFileURLs] = useState(Array(4).fill(""));
   const [licensePlate, setLicensePlate] = useState("");
@@ -45,95 +45,113 @@ export const UploadImage = ({ contractInstance }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    //comprueba que todas las fileURLs esten llenas
-    if (fileURLs.some((url) => url === "")) {
-      setError("Por favor, sube todas las imagenes");
-    } else {
-      console.log("fileURLs: ", fileURLs);
-      console.log("licensePlate: ", licensePlate);
-      try {
-        const tx = await contractInstance.setPhotosOfCar(
-          licensePlate,
-          fileURLs[0],
-          fileURLs[1],
-          fileURLs[2],
-          fileURLs[3],
-        );
+    setLoading(true);
+    try {
+      // Crear un array de promesas para cada imagen a subir
+      const uploadPromises = files.map((file, index) => {
+        if (!file) {
+          throw new Error(`Por favor, sube todas las imagenes`);
+        }
+        // Devuelve la promesa sin esperar a que se resuelva
+        return uploadImage(index);
+      });
 
-        setLoading(true);
-        await tx.wait();
-        setLoading(false);
+      // Espera a que todas las promesas se resuelvan antes de continuar
+      await Promise.all(uploadPromises);
 
-        window.location.reload();
+      const tx = await contractInstance.setPhotosOfCar(
+        licensePlate,
+        fileURLs[0],
+        fileURLs[1],
+        fileURLs[2],
+        fileURLs[3],
+      );
 
-        console.log("Transaction: ", tx);
-      } catch (error) {
-        console.error("Error: ", error);
-      }
+      await tx.wait();
+      setLoading(false);
+      window.location.reload();
+
+      console.log("Transaction: ", tx);
+    } catch (error) {
+      console.error("Error: ", error);
+      setLoading(false);
+      if (error.message) setError(error.message);
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="licensePlate">Matricula:</label>
-        <input
-          type="text"
-          id="licensePlate"
-          value={licensePlate}
-          onChange={(e) => setLicensePlate(e.target.value)}
-        />
-        {files.map((_, index) => (
-          <div key={index}>
-            <input
-              type="file"
-              onChange={(e) => handleFileChange(e, index)}
-            />
-            <button onClick={() => uploadImage(index)}>Subir</button>
-            {fileURLs[index] && (
-              <div>
-                <p>Imagen subida exitosamente:</p>
-                <img
-                  src={fileURLs[index]}
-                  alt={`Imagen subida ${index + 1}`}
-                  style={{ width: "50%" }}
-                />
-                <p>
-                  URL:{" "}
-                  <a
-                    href={fileURLs[index]}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {fileURLs[index]}
-                  </a>
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
-        <Button variant="primary" type="submit" disabled={loading}>
-          {loading
-            ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                  variant="light" // add this line to set the color of the spinner to white
-                />{" "}
-                &nbsp; Actualizando imagenes...
-              </>
-            )
-            : (
-              "actualizar imagenes"
-            )}
-        </Button>
-        {error && <p>{error}</p>}
-      </form>
-    </div>
+    <Card
+      style={{
+        width: "50rem",
+        border: "1px solid #ccc",
+        borderRadius: "15px",
+        boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+        margin: "15px 0 0 0",
+      }}
+    >
+      <Card.Body style={{ margin: "20px" }}>
+        <Card.Title style={{ textAlign: "center" }}>
+          <h2>Update Car Photos</h2>
+        </Card.Title>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="licensePlate">Matricula:</label>
+          <input
+            type="text"
+            id="licensePlate"
+            value={licensePlate}
+            onChange={(e) => setLicensePlate(e.target.value)}
+          />
+          {files.map((_, index) => (
+            <div key={index}>
+              <input
+                type="file"
+                onChange={(e) => handleFileChange(e, index)}
+              />
+              {fileURLs[index] && (
+                <div>
+                  <p>Imagen subida exitosamente:</p>
+                  <img
+                    src={fileURLs[index]}
+                    alt={`Imagen subida ${index + 1}`}
+                    style={{ width: "50%" }}
+                  />
+                  <p>
+                    URL:{" "}
+                    <a
+                      href={fileURLs[index]}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {fileURLs[index]}
+                    </a>
+                  </p>
+                </div>
+              )}
+            </div>
+          ))}
+          <Button variant="primary" type="submit" disabled={loading}>
+            {loading
+              ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    variant="light" // add this line to set the color of the spinner to white
+                  />{" "}
+                  &nbsp; Actualizando imagenes...
+                </>
+              )
+              : (
+                "actualizar imagenes"
+              )}
+          </Button>
+          {error && <p>{error}</p>}
+        </form>
+      </Card.Body>
+    </Card>
   );
 };
 
