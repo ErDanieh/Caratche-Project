@@ -33,12 +33,12 @@ const CarCard = (
           borderRadius: "15px",
         }}
       >
-        <Card.Header>Vehiculo encontrado:</Card.Header>
+        <Card.Header>Vehicle Found:</Card.Header>
         <Card.Body>
           <Card.Title>
-            Fabricante: {carMaker}, Modelo: {carModel}
+            Fabricante: {carMaker}, Model: {carModel}
           </Card.Title>
-          <Card.Text>Este vehiculo ha sido fabricado en: {carYear}</Card.Text>
+          <Card.Text>This vehicle has been manufactured in: {carYear}</Card.Text>
           <Card.Text>
             Este vehiculo ha sido matriculado en: {carRegistrationDate}
           </Card.Text>
