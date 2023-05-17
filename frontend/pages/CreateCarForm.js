@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 
-export const CreateCarForm = ({ contractInstance, account }) => {
+export const CreateCarForm = ({ contractInstance }) => {
   const [make, setMake] = useState("");
   const [model, setModel] = useState("");
   const [year, setYear] = useState("");
@@ -40,19 +40,20 @@ export const CreateCarForm = ({ contractInstance, account }) => {
     <Card
       style={{
         width: "50rem",
+        height: "auto",
         border: "1px solid #ccc",
         borderRadius: "15px",
         boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
         margin: "0 auto",
       }}
     >
-      <Card.Body style={{margin:"20px"}}>
-        <Card.Title style={{textAlign:"center"}}>
+      <Card.Body style={{ margin: "20px" }}>
+        <Card.Title style={{ textAlign: "center" }}>
           <h2>Create Car</h2>
         </Card.Title>
         <Card.Text>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="make">
+            <Form.Group controlId="make" style={{ margin: "10px" }}>
               <Form.Label>Make</Form.Label>
               <Form.Control
                 type="text"
@@ -61,7 +62,7 @@ export const CreateCarForm = ({ contractInstance, account }) => {
               />
             </Form.Group>
 
-            <Form.Group controlId="model">
+            <Form.Group controlId="model" style={{ margin: "10px" }}>
               <Form.Label>Model</Form.Label>
               <Form.Control
                 type="text"
@@ -70,7 +71,7 @@ export const CreateCarForm = ({ contractInstance, account }) => {
               />
             </Form.Group>
 
-            <Form.Group controlId="year">
+            <Form.Group controlId="year" style={{ margin: "10px" }}>
               <Form.Label>Year</Form.Label>
               <Form.Control
                 type="number"
@@ -79,7 +80,7 @@ export const CreateCarForm = ({ contractInstance, account }) => {
               />
             </Form.Group>
 
-            <Form.Group controlId="licensePlate">
+            <Form.Group controlId="licensePlate" style={{ margin: "10px" }}>
               <Form.Label>License Plate</Form.Label>
               <Form.Control
                 type="text"
@@ -88,7 +89,7 @@ export const CreateCarForm = ({ contractInstance, account }) => {
               />
             </Form.Group>
 
-            <Form.Group controlId="registrationDate">
+            <Form.Group controlId="registrationDate" style={{ margin: "10px" }}>
               <Form.Label>Registration Date</Form.Label>
               <Form.Control
                 type="number"
@@ -97,7 +98,7 @@ export const CreateCarForm = ({ contractInstance, account }) => {
               />
             </Form.Group>
 
-            <Form.Group controlId="walletOfOwner">
+            <Form.Group controlId="walletOfOwner" style={{ margin: "10px" }}>
               <Form.Label>Wallet of Owner</Form.Label>
               <Form.Control
                 type="text"
@@ -110,7 +111,7 @@ export const CreateCarForm = ({ contractInstance, account }) => {
               variant="primary"
               type="submit"
               disabled={loading}
-              style={{ marginTop: "7px",  }}
+              style={{ margin: "10px" }}
             >
               {loading
                 ? (

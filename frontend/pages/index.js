@@ -337,7 +337,7 @@ export default function Home() {
 
           <Row className="g-4">
             <Col xs={12} md={6}>
-              <div style={{ height: "100%", width: "100%" }}>
+              <div style={{ height: "100%", width: "100%", margin: "15px" }}>
                 {canCreateCar && (
                   <CreateCarForm
                     contractInstance={contract}
@@ -347,7 +347,7 @@ export default function Home() {
               </div>
             </Col>
             <Col xs={12} md={6}>
-              <div style={{ height: "100%", width: "100%" }}>
+              <div style={{ height: "100%", width: "100%", margin: "15px" }}>
                 {canAddAccident && (
                   <AddAccident contractInstance={contract} account={account} />
                 )}
@@ -356,7 +356,7 @@ export default function Home() {
           </Row>
           <Row className="g-4">
             <Col xs={12} md={6}>
-              <div style={{ height: "100%", width: "100%" }}>
+              <div style={{ height: "100%", width: "100%", margin: "15px" }}>
                 {canAddReparation && (
                   <AddReparation
                     contractInstance={contract}
@@ -366,7 +366,7 @@ export default function Home() {
               </div>
             </Col>
             <Col xs={12} md={6}>
-              <div style={{ height: "100%", width: "100%" }}>
+              <div style={{ height: "100%", width: "100%", margin: "15px" }}>
                 {canAddKilometers && (
                   <AddKilometers
                     contractInstance={contract}
@@ -378,7 +378,7 @@ export default function Home() {
           </Row>
           <Row className="g-4">
             <Col xs={12} md={6}>
-              <div style={{ height: "100%", width: "100%" }}>
+              <div style={{ height: "100%", width: "100%", margin: "15px" }}>
                 {canUploadImage && (
                   <UploadImage contractInstance={contract} account={account} />
                 )}

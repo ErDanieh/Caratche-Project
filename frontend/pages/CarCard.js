@@ -38,9 +38,11 @@ const CarCard = (
           <Card.Title>
             Fabricante: {carMaker}, Model: {carModel}
           </Card.Title>
-          <Card.Text>This vehicle has been manufactured in: {carYear}</Card.Text>
           <Card.Text>
-            Este vehiculo ha sido matriculado en: {carRegistrationDate}
+            This vehicle has been manufactured in: {carYear}
+          </Card.Text>
+          <Card.Text>
+            This vehicle was manufactured: {carRegistrationDate}
           </Card.Text>
           <div>
             <img
@@ -71,6 +73,7 @@ const CarCard = (
           </div>
           <div className="d-flex flex-wrap justify-content-center">
             <h4>Historial de accidentes</h4>
+            {carAccidents.length === 0 && <p>No accidents</p>}
             {carAccidents.map((accident, index) => (
               <EventCard key={index} event={accident} />
             ))}
@@ -78,13 +81,14 @@ const CarCard = (
 
           <div className="d-flex flex-wrap justify-content-start">
             <h4>Historial de Reparaciones</h4>
+            {carReparations.length === 0 && <p>No reparations</p>}
             {carReparations.map((repair, index) => (
               <EventCard key={index} event={repair} />
             ))}
           </div>
         </Card.Body>
         <Card.Footer className="text-muted">
-          Direccion del contrato: {carAddress}
+          Smart Contract Address: {carAddress}
         </Card.Footer>
       </Card>
     </>
