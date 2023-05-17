@@ -204,9 +204,14 @@ export default function Home() {
   const connectWalletAndRenderSearch = () => {
     if (!walletConnected) {
       return (
-        <button onClick={connectWallet} variant="primary">
+        <Button
+          onClick={connectWallet}
+          variant="primary"
+          className="btn btn-primary btn-lg"
+          style={{ margin: "15px" }}
+        >
           Connect your wallet
-        </button>
+        </Button>
       );
     }
 
