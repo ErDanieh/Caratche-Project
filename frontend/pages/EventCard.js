@@ -8,16 +8,15 @@ const EventCard = ({ event }) => {
         border: "1px solid #ccc",
         boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
         margin: "10px",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "space-between",
+        
 
       }}
     >
-      <Card.Body className = "m-10">
-        <Card.Title>Tipo: {event.type}</Card.Title>
-        <Card.Text>Ano: {event.year}</Card.Text>
-        <Card.Text>Descripcion: {event.description}</Card.Text>
+      <Card.Body style={{margin:"5px" ,justifyContent:"left"}}>
+        <Card.Title>Type: {event.type}</Card.Title>
+        <Card.Text>Year: {event.year}</Card.Text>
+        <Card.Text>Description: {event.description}</Card.Text>
       </Card.Body>
     </Card>
   );

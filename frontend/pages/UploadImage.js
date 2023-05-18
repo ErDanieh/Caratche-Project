@@ -95,7 +95,7 @@ export const UploadImage = ({ contractInstance, account }) => {
         </Card.Title>
         <form onSubmit={handleSubmit}>
           <div style={{ textAlign: "center" }}>
-            <label htmlFor="licensePlate">Matricula:</label>
+            <label htmlFor="licensePlate">License Plate:</label>
             <p>
               <input
                 type="text"
@@ -153,11 +153,11 @@ export const UploadImage = ({ contractInstance, account }) => {
                     aria-hidden="true"
                     variant="light" // add this line to set the color of the spinner to white
                   />{" "}
-                  &nbsp; Actualizando imagenes...
+                  &nbsp; Updating images...
                 </>
               )
               : (
-                "actualizar imagenes"
+                "Update images"
               )}
           </Button>
           {error && <p>{error}</p>}

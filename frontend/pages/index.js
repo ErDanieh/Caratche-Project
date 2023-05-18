@@ -216,7 +216,7 @@ export default function Home() {
     }
 
     if (walletConnected) {
-      console.log("Conectada wallet");
+      console.log("Wallet connected");
       return (
         <div style={{ margin: "10px" }}>
           <Form onSubmit={handleSubmit}>
@@ -243,9 +243,10 @@ export default function Home() {
               variant="primary"
               type="submit"
               className="btn btn-primary btn-lg"
+              style={{ margin: "15px" }}
               onClick={getCar}
             >
-              Buscar
+              Search
             </Button>
           </div>
         </div>
@@ -259,7 +260,11 @@ export default function Home() {
         carAddress === "0x0000000000000000000000000000000000000000" ||
         carAddress === ""
       ) {
-        return <h1>Este vehiculo no existe o no esta registrado</h1>;
+        return (
+          <div style={{ textAlign: "center" }}>
+            <h1>This car is not registered at the chain</h1>
+          </div>
+        );
       } else {
         return (
           <CarCard
