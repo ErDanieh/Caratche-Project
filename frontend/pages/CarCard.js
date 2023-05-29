@@ -33,17 +33,21 @@ const CarCard = (
           borderRadius: "15px",
         }}
       >
-        <Card.Header>Vehicle Found:</Card.Header>
         <Card.Body>
           <Card.Title>
-            Fabricante: {carMaker}, Model: {carModel}
+            <h4>
+              Maker: {carMaker}, Model: {carModel}
+            </h4>
           </Card.Title>
           <Card.Text>
-            This vehicle has been manufactured in: {carYear}
+            <h4>This vehicle was manufactured: {carYear}</h4>
           </Card.Text>
           <Card.Text>
-            This vehicle was manufactured: {carRegistrationDate}
+            <h4>
+              This vehicle was registered: {carRegistrationDate}
+            </h4>
           </Card.Text>
+
           <div>
             <img
               key={0}
@@ -72,7 +76,7 @@ const CarCard = (
             <KilometersChart data={kilometersData} />
           </div>
           <div className="d-flex flex-wrap justify-content-center">
-            <h4>Historial de accidentes</h4>
+            <h3>Accidents History</h3>
             {carAccidents.length === 0 && <p>No accidents</p>}
             {carAccidents.map((accident, index) => (
               <EventCard key={index} event={accident} />
@@ -80,7 +84,7 @@ const CarCard = (
           </div>
 
           <div className="d-flex flex-wrap justify-content-start">
-            <h4>Historial de Reparaciones</h4>
+            <h3>Reparations History</h3>
             {carReparations.length === 0 && <p>No reparations</p>}
             {carReparations.map((repair, index) => (
               <EventCard key={index} event={repair} />

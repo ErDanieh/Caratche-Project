@@ -14,7 +14,7 @@ export const KilometersChart = ({ data }) => {
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <h3 style={{ textAlign: "center" }}>
-          Evolucion de los kilometros del vehiculo
+          Kilometers per year evolution 
         </h3>
         <LineChart
           width={600}

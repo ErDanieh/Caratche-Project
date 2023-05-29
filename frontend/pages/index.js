@@ -224,7 +224,7 @@ export default function Home() {
               <Form.Label>Matrícula del vehículo</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Introduzca la matrícula"
+                placeholder="Introduce the license plate XXX1234"
                 value={searchTerm}
                 onChange={handleInputChange}
                 onKeyPress={(event) => {
