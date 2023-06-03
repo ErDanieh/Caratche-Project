@@ -1,28 +1,48 @@
 import EventCard from "./EventCard";
 import Card from "react-bootstrap/Card";
 import { KilometersChart } from "./KilometersChart";
+import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import FormControl from "react-bootstrap/FormControl";
 
-const CarCard = (
-  {
-    carAddress,
-    carMaker,
-    carModel,
-    carYear,
-    carRegistrationDate,
-    carImage0,
-    carImage1,
-    carImage2,
-    carImage3,
-    carAccidents,
-    carReparations,
-    kilometersData,
-  },
-) => {
+const CarCard = ({
+  carAddress,
+  carMaker,
+  carModel,
+  carYear,
+  carRegistrationDate,
+  carImage0,
+  carImage1,
+  carImage2,
+  carImage3,
+  carAccidents,
+  carReparations,
+  kilometersData,
+  licensePlate,
+  canChangeOwner,
+  contract,
+  account,
+}) => {
+  const [walletAddress, setWalletAddress] = useState("");
+
+  const handleWalletAddressChange = (e) => setWalletAddress(e.target.value);
+
+  const handleConfirmChangeOwner = async () => {
+    try {
+      const tx = await contract.setNewOnwerOfCar(licensePlate, walletAddress);
+      await tx.wait();
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (
     !carAddress || carAddress === "0x0000000000000000000000000000000000000000"
   ) {
     return <h1>Este vehiculo no existe o no esta registrado</h1>;
   }
+
   return (
     <>
       <Card
@@ -90,6 +110,21 @@ const CarCard = (
               <EventCard key={index} event={repair} />
             ))}
           </div>
+
+          {canChangeOwner && (
+            <div>
+              <FormControl
+                placeholder="Enter wallet address"
+                aria-label="Wallet address"
+                aria-describedby="basic-addon1"
+                value={walletAddress}
+                onChange={handleWalletAddressChange}
+              />
+              <Button variant="primary" onClick={handleConfirmChangeOwner}>
+                Change Owner
+              </Button>
+            </div>
+          )}
         </Card.Body>
         <Card.Footer className="text-muted">
           Smart Contract Address: {carAddress}

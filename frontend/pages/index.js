@@ -38,6 +38,7 @@ export default function Home() {
   const [kmsData, setKmsData] = useState(null);
   const [vectorYears, setVectorYears] = useState([]);
   const [vectorKms, setVectorKms] = useState([]);
+  const [canChangeOwner, setCanChangeOwner] = useState(false);
 
   function processAccidentsArray(array) {
     const processedArray = [];
@@ -54,7 +55,7 @@ export default function Home() {
         // This is not a BigNumber object
         year = array[i][1];
       }
-      const entry = {
+     const entry = {
         type: array[i][0],
         year: year,
         description: array[i][2],
@@ -80,6 +81,7 @@ export default function Home() {
 
     return data;
   };
+
   const connectWallet = async () => {
     try {
       await getProviderOrSigner();
@@ -187,6 +189,8 @@ export default function Home() {
       setKmsData(createDataObject(years, kilometers));
       setVectorYears(years);
       setVectorKms(kilometers);
+      setCanChangeOwner(await contract.getActualOwnerOfCar(searchTerm) == account);
+
     } catch (err) {
       console.error(err);
     }
@@ -221,7 +225,7 @@ export default function Home() {
         <div style={{ margin: "10px" }}>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicTitle">
-              <Form.Label>Matrícula del vehículo</Form.Label>
+              <Form.Label>Vehicle license plate</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Introduce the license plate XXX1234"
@@ -233,8 +237,8 @@ export default function Home() {
               />
               <br />
               <Form.Text className="text-muted">
-                Introduzca la matrícula del vehículo y presione el boton de
-                busqueda.
+                Introduction of the license plate is mandatory to search for the
+                vehicle.
               </Form.Text>
             </Form.Group>
           </Form>
@@ -259,6 +263,7 @@ export default function Home() {
       if (
         carAddress === "0x0000000000000000000000000000000000000000" ||
         carAddress === ""
+
       ) {
         return (
           <div style={{ textAlign: "center" }}>
@@ -280,6 +285,10 @@ export default function Home() {
             carAccidents={carAccidents}
             carReparations={carReparations}
             kilometersData={kmsData}
+            licensePlate={searchTerm}
+            canChangeOwner={canChangeOwner}
+            contract={contract}
+            account={account}
           />
         );
       }

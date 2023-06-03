@@ -80,6 +80,13 @@ contract CarFactory is AccessControl {
       return cars.length;
     }
 
+
+    function deleteCar(string memory _licensePlate) public {
+        require(hasRole(CARFACTORY_ROLE, msg.sender)|| hasRole(SYSADMIN_ROLE,msg.sender), "You can not delete a Car");
+        address carAddress = licensePlateToCar[_licensePlate];
+        delete licensePlateToCar[_licensePlate];
+    }
+
     //Funciones para interactuar con los contratos hijos 
 
     //*************************Funciones para usuarios publicos****************************************
@@ -130,6 +137,7 @@ contract CarFactory is AccessControl {
 }
 
 
+    //setters
     function setPhotosOfCar(string memory _licensePlate,string memory p1, string memory p2, string memory p3, string memory p4) public{
       require(hasRole(CARFACTORY_ROLE, msg.sender)|| hasRole(SYSADMIN_ROLE,msg.sender), "You are not a CarFactory");
        Car(address(licensePlateToCar[_licensePlate])).setPhotos(p1,p2,p3,p4);
@@ -152,6 +160,7 @@ contract CarFactory is AccessControl {
         return cars;
     }
 
+    //Anyade una nueva reparacion a un coche
     function addRepairToCar(
         string memory _licensePlate,
         string memory _repairType,
@@ -162,6 +171,7 @@ contract CarFactory is AccessControl {
         Car(address(licensePlateToCar[_licensePlate])).addRepair(_repairType, _repairDate, _description);
     }
 
+    //Anyade un nuevo accidente a un coche
     function addAccidenteToCar(
         string memory _licensePlate,
         string memory _accidentType,
@@ -172,6 +182,7 @@ contract CarFactory is AccessControl {
         Car(address(licensePlateToCar[_licensePlate])).addAccident(_accidentType, _accidentDate, _description);
     }
 
+    //Anyade un nuevo kilometraje a un coche
     function addKilometrajeToCar(string memory _licensePlate, uint _year, uint _km) public{
       require(hasRole(GARAGE_ROLE, msg.sender) || hasRole(SYSADMIN_ROLE,msg.sender), "You need to be a garage");
       Car(address(licensePlateToCar[_licensePlate])).addKilometrajeCar(_year, _km);
