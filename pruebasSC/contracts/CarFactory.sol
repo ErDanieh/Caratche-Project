@@ -41,6 +41,19 @@ contract CarFactory is AccessControl {
      return hasRole(SYSADMIN_ROLE, msg.sender); 
     }
 
+
+    function grantRoleFactory(address _address) public {
+      grantRole(CARFACTORY_ROLE, _address);
+    }
+
+    function grantRoleGarage(address _address) public {
+      grantRole(GARAGE_ROLE, _address);
+    }
+
+    function grantRoleAdmin(address _address) public {
+      grantRole(SYSADMIN_ROLE, _address);
+    }
+
     function createCar(
         string memory _make,
         string memory _model,
@@ -50,6 +63,11 @@ contract CarFactory is AccessControl {
         address _walletOfOwner
     ) public {
         require(hasRole(CARFACTORY_ROLE, msg.sender)|| hasRole(SYSADMIN_ROLE,msg.sender), "You can not create a Car");
+
+        if(licensePlateToCar[_licensePlate] != address(0)){
+            revert("Car already exists");
+        }
+
         Car newCar = new Car(_make, _model, _year, _licensePlate, _registrationDate, _walletOfOwner);
         cars.push(address(newCar));
         licensePlateToCar[_licensePlate] = address(newCar);
