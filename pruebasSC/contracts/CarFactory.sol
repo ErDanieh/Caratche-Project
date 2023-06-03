@@ -83,7 +83,7 @@ contract CarFactory is AccessControl {
 
     function deleteCar(string memory _licensePlate) public {
         require(hasRole(CARFACTORY_ROLE, msg.sender)|| hasRole(SYSADMIN_ROLE,msg.sender), "You can not delete a Car");
-        address carAddress = licensePlateToCar[_licensePlate];
+        //address carAddress = licensePlateToCar[_licensePlate];
         delete licensePlateToCar[_licensePlate];
     }
 
@@ -144,7 +144,7 @@ contract CarFactory is AccessControl {
     }
 
 
-    function setNewOnwerOfCar(string memory _licensePlate, address _newOwner) public {
+    function setNewOwnerOfCar(string memory _licensePlate, address _newOwner) public {
       require(Car(address(licensePlateToCar[_licensePlate])).getActualOwner() == msg.sender);
         Car(address(licensePlateToCar[_licensePlate])).setNewOwner(_newOwner); 
     }

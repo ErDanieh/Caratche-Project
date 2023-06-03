@@ -29,7 +29,7 @@ const CarCard = ({
 
   const handleConfirmChangeOwner = async () => {
     try {
-      const tx = await contract.setNewOnwerOfCar(licensePlate, walletAddress);
+      const tx = await contract.setNewOwnerOfCar(licensePlate, walletAddress);
       await tx.wait();
       window.location.reload();
     } catch (error) {

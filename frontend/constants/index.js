@@ -312,6 +312,19 @@ export const abi = [
           "type": "string"
         }
       ],
+      "name": "deleteCar",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_licensePlate",
+          "type": "string"
+        }
+      ],
       "name": "getAccidentOfCar",
       "outputs": [
         {
@@ -740,7 +753,7 @@ export const abi = [
           "type": "address"
         }
       ],
-      "name": "setNewOnwerOfCar",
+      "name": "setNewOwnerOfCar",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -814,8 +827,9 @@ export const abi = [
       ],
       "stateMutability": "view",
       "type": "function"
-    }  ]
+    }
+]
 
 
-export const CARFACTORY_CONTRACT_ADDRESS = "0xfb10b426D952E7cb6740Ad0c832a0F48b652742F"
+export const CARFACTORY_CONTRACT_ADDRESS = "0xce9258d049be0D01bBf0E35643459b932F904369"
 
