@@ -111,8 +111,10 @@ const CarCard = ({
             ))}
           </div>
 
+          <br></br>
           {canChangeOwner && (
-            <div>
+            <div style={{margin:"30px"}}>
+            <h3>Change owner</h3>
               <FormControl
                 placeholder="Enter wallet address"
                 aria-label="Wallet address"
@@ -120,7 +122,7 @@ const CarCard = ({
                 value={walletAddress}
                 onChange={handleWalletAddressChange}
               />
-              <Button variant="primary" onClick={handleConfirmChangeOwner}>
+              <Button variant="primary" style={{margin:"10px"}} onClick={handleConfirmChangeOwner}>
                 Change Owner
               </Button>
             </div>
