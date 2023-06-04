@@ -625,6 +625,45 @@ export const abi = [
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "_address",
+          "type": "address"
+        }
+      ],
+      "name": "grantRoleAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_address",
+          "type": "address"
+        }
+      ],
+      "name": "grantRoleFactory",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_address",
+          "type": "address"
+        }
+      ],
+      "name": "grantRoleGarage",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "bytes32",
           "name": "role",
           "type": "bytes32"
@@ -831,5 +870,5 @@ export const abi = [
 ]
 
 
-export const CARFACTORY_CONTRACT_ADDRESS = "0xce9258d049be0D01bBf0E35643459b932F904369"
+export const CARFACTORY_CONTRACT_ADDRESS = "0xF1e0Cc08134Fa485caea4BC0F5eB9D66bf3E39b1"
 

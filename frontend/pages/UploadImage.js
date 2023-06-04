@@ -4,7 +4,6 @@ import { Button, Card, Spinner } from "react-bootstrap";
 
 export const UploadImage = ({ contractInstance, account }) => {
   const [files, setFiles] = useState(Array(4).fill(null));
-  const [fileURLs, setFileURLs] = useState(Array(4).fill(""));
   const [licensePlate, setLicensePlate] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -27,11 +26,7 @@ export const UploadImage = ({ contractInstance, account }) => {
     );
 
     const url = `https://ipfs.io/ipfs/${result.data.IpfsHash}`;
-    setFileURLs((prevURLs) => {
-      const newURLs = [...prevURLs];
-      newURLs[index] = url;
-      return newURLs;
-    });
+    return url;
   };
 
   const handleFileChange = (e, index) => {
@@ -57,14 +52,17 @@ export const UploadImage = ({ contractInstance, account }) => {
       });
 
       // Espera a que todas las promesas se resuelvan antes de continuar
-      await Promise.all(uploadPromises);
+      const allURLs = await Promise.all(uploadPromises);
+
+      console.log("Subidas todas las imagenes");
+      console.log(allURLs);
 
       const tx = await contractInstance.setPhotosOfCar(
         licensePlate,
-        fileURLs[0],
-        fileURLs[1],
-        fileURLs[2],
-        fileURLs[3],
+        allURLs[0],
+        allURLs[1],
+        allURLs[2],
+        allURLs[3],
       );
 
       await tx.wait();
@@ -106,34 +104,13 @@ export const UploadImage = ({ contractInstance, account }) => {
             </p>
           </div>
           {files.map((_, index) => (
-            
             <div key={index}>
-            <p>
-              <input
-                type="file"
-                onChange={(e) => handleFileChange(e, index)}
-              />
-              {fileURLs[index] && (
-                <div>
-                  <p>Imagen subida exitosamente:</p>
-                  <img
-                    src={fileURLs[index]}
-                    alt={`Imagen subida ${index + 1}`}
-                    style={{ width: "50%" }}
-                  />
-                  <p>
-                    URL:{" "}
-                    <a
-                      href={fileURLs[index]}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {fileURLs[index]}
-                    </a>
-                  </p>
-                </div>
-              )}
-            </p>
+              <p>
+                <input
+                  type="file"
+                  onChange={(e) => handleFileChange(e, index)}
+                />
+              </p>
             </div>
           ))}
           <Button

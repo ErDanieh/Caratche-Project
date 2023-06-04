@@ -99,11 +99,28 @@ contract CarFactory is AccessControl {
     }
 
 
-    function deleteCar(string memory _licensePlate) public {
-        require(hasRole(CARFACTORY_ROLE, msg.sender)|| hasRole(SYSADMIN_ROLE,msg.sender), "You can not delete a Car");
-        //address carAddress = licensePlateToCar[_licensePlate];
-        delete licensePlateToCar[_licensePlate];
-    }
+  function deleteCar(string memory _licensePlate) public {
+      require(hasRole(SYSADMIN_ROLE,msg.sender), "You can not delete a Car");
+      address carAddress = licensePlateToCar[_licensePlate];
+      
+      uint index = cars.length; // If car is not found this will remain as is and we will remove nothing.
+      for (uint i = 0; i < cars.length; i++) {
+          if (cars[i] == carAddress) {
+              index = i;
+              break;
+          }
+      }
+      
+      if (index < cars.length) { // If car was found in the list
+          // Move the last element to the place of the one to delete
+          cars[index] = cars[cars.length - 1];
+          // Now we can decrease the size of the list by one
+          cars.pop();
+      }
+
+      delete licensePlateToCar[_licensePlate];
+  }
+
 
     //Funciones para interactuar con los contratos hijos 
 
@@ -144,15 +161,15 @@ contract CarFactory is AccessControl {
     }
 
     function getPhotosOfCar(string memory _licensePlate) public view returns(string[] memory){
-    CarData.Photos memory p = Car(address(licensePlateToCar[_licensePlate])).getPhotos();
-    string[] memory re = new string[](4);
-    re[0] = p.frontalPhoto;
-    re[1] = p.rightSidePhoto;
-    re[2] = p.leftSidePhoto;
-    re[3] = p.backSidePhoto;
+      CarData.Photos memory p = Car(address(licensePlateToCar[_licensePlate])).getPhotos();
+      string[] memory re = new string[](4);
+      re[0] = p.frontalPhoto;
+      re[1] = p.rightSidePhoto;
+      re[2] = p.leftSidePhoto;
+      re[3] = p.backSidePhoto;
 
-    return re;
-}
+      return re;
+    }
 
 
     //setters
