@@ -12,6 +12,7 @@ import { AddAccident } from "./AddAccidents";
 import { AddReparation } from "./AddReparation";
 import { AddKilometers } from "./AddKilometers";
 import { UploadImage } from "./UploadImage";
+import DeleteCar, { deleteCarACar } from "./DeleteCar";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
@@ -35,6 +36,7 @@ export default function Home() {
   const [canAddReparation, setAddReparation] = useState(false);
   const [canAddKilometers, setCanAddKilometers] = useState(false);
   const [canUploadImage, setCanUploadImage] = useState(false);
+  const [canDeleteACar, setCanDeleteACar] = useState(false);
   const [kmsData, setKmsData] = useState(null);
   const [vectorYears, setVectorYears] = useState([]);
   const [vectorKms, setVectorKms] = useState([]);
@@ -55,7 +57,7 @@ export default function Home() {
         // This is not a BigNumber object
         year = array[i][1];
       }
-     const entry = {
+      const entry = {
         type: array[i][0],
         year: year,
         description: array[i][2],
@@ -189,8 +191,9 @@ export default function Home() {
       setKmsData(createDataObject(years, kilometers));
       setVectorYears(years);
       setVectorKms(kilometers);
-      setCanChangeOwner(await contract.getActualOwnerOfCar(searchTerm) == account);
-
+      setCanChangeOwner(
+        await contract.getActualOwnerOfCar(searchTerm) == account,
+      );
     } catch (err) {
       console.error(err);
     }
@@ -263,7 +266,6 @@ export default function Home() {
       if (
         carAddress === "0x0000000000000000000000000000000000000000" ||
         carAddress === ""
-
       ) {
         return (
           <div style={{ textAlign: "center" }}>
@@ -307,6 +309,7 @@ export default function Home() {
       const isAdmin = await contractLocal.isAADmin();
       setCanCreateCar(isFactory || isAdmin);
       setCanUploadImage(isFactory || isAdmin);
+      setCanDeleteACar(isAdmin);
       console.log(canCreateCar);
     } catch (err) {
       console.error(err);
@@ -400,6 +403,13 @@ export default function Home() {
               <div style={{ height: "100%", width: "100%", margin: "15px" }}>
                 {canUploadImage && (
                   <UploadImage contractInstance={contract} account={account} />
+                )}
+              </div>
+            </Col>
+            <Col xs={12} md={6}>
+              <div style={{ height: "100%", width: "100%", margin: "15px" }}>
+                {canDeleteACar && (
+                  <DeleteCar contractInstance={contract} account={account} />
                 )}
               </div>
             </Col>
