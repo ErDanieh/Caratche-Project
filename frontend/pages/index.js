@@ -331,6 +331,7 @@ export default function Home() {
       setAddAccident(isGarage || isAdmin);
       setAddReparation(isGarage || isAdmin);
       setCanAddKilometers(isGarage || isAdmin);
+      setCanDeleteACar(isAdmin);
       console.log(canAddAccident);
     } catch (err) {
       console.error(err);
@@ -370,8 +371,8 @@ export default function Home() {
             </Col>
             <Col xs={12} md={6}>
               <div style={{ height: "100%", width: "100%", margin: "15px" }}>
-                {canAddAccident && (
-                  <AddAccident contractInstance={contract} account={account} />
+                {canUploadImage && (
+                  <UploadImage contractInstance={contract} account={account} />
                 )}
               </div>
             </Col>
@@ -389,20 +390,18 @@ export default function Home() {
             </Col>
             <Col xs={12} md={6}>
               <div style={{ height: "100%", width: "100%", margin: "15px" }}>
+                {canAddAccident && (
+                  <AddAccident contractInstance={contract} account={account} />
+                )}
+              </div>
+            </Col>
+            <Col xs={12} md={6}>
+              <div style={{ height: "100%", width: "100%", margin: "15px" }}>
                 {canAddKilometers && (
                   <AddKilometers
                     contractInstance={contract}
                     account={account}
                   />
-                )}
-              </div>
-            </Col>
-          </Row>
-          <Row className="g-4">
-            <Col xs={12} md={6}>
-              <div style={{ height: "100%", width: "100%", margin: "15px" }}>
-                {canUploadImage && (
-                  <UploadImage contractInstance={contract} account={account} />
                 )}
               </div>
             </Col>

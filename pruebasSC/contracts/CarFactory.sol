@@ -25,7 +25,7 @@ contract CarFactory is AccessControl {
       _setupRole(CARFACTORY_ROLE, msg.sender);
       // Asigna el rol GARAGE_ROLE al creador del contrato
       _setupRole(GARAGE_ROLE, msg.sender);
-
+      // Asigna el rol SYSADMIN_ROLE al creador del contrato
       _setupRole(SYSADMIN_ROLE, msg.sender);
     }
     
@@ -43,15 +43,18 @@ contract CarFactory is AccessControl {
 
 
     function grantRoleFactory(address _address) public {
-      grantRole(CARFACTORY_ROLE, _address);
+      require(isAADmin(), "No eres admin");
+      _setupRole(CARFACTORY_ROLE, _address);
     }
 
     function grantRoleGarage(address _address) public {
-      grantRole(GARAGE_ROLE, _address);
+      require(isAADmin(), "No eres admin");
+      _setupRole(GARAGE_ROLE, _address);
     }
 
     function grantRoleAdmin(address _address) public {
-      grantRole(SYSADMIN_ROLE, _address);
+      require(isAADmin(), "No eres admin");
+      _setupRole(SYSADMIN_ROLE, _address);
     }
 
     function createCar(
