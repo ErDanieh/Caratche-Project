@@ -33,6 +33,8 @@ contract Car {
         registrationDate = _registrationDate;
         actualOwner = _owner;
         ownerHistory.push(_owner);
+        addKilometrajeCar(_year, 0);
+
     }
     
     function setPhotos(string memory p1, string memory p2, string memory p3, string memory p4) public{

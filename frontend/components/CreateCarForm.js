@@ -120,7 +120,7 @@ export const CreateCarForm = ({ contractInstance }) => {
                   </>
                 )
                 : (
-                  "Crear coche"
+                  "Create new car"
                 )}
             </Button>
           </Form>
